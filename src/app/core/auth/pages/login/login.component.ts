@@ -1,54 +1,131 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { RouterLink } from '@angular/router';
+import { FormFieldComponent } from '../../../../shared/components/form-field/form-field.component';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [
-    CommonModule,  ReactiveFormsModule
-  ],
-  template: ` <div class="flex h-screen bg-indigo-700">
-  <div class="w-full max-w-xs m-auto bg-indigo-100 rounded p-5">
-        <header>
-          <img class="w-20 mx-auto mb-5" src="https://img.icons8.com/fluent/344/year-of-tiger.png" />
-        </header>
-        <form [formGroup]="loginForm" (ngSubmit)="handleLoginSubmit()">
-          <div>
-            <label class="block mb-2 text-indigo-500">Email</label>
-            <input formControlName="email" class="w-full p-2 mb-6 text-indigo-700 border-b-2 border-indigo-500 outline-none focus:bg-gray-300" type="text" placeholder="Mark Lowel Montealto">
-          </div>
-          <div>
-            <label class="block mb-2 text-indigo-500">Password</label>
-            <input formControlName="password" class="w-full p-2 mb-6 text-indigo-700 border-b-2 border-indigo-500 outline-none focus:bg-gray-300" type="password" name="password">
-          </div>
-          <div>
-            <button class="w-full bg-indigo-700 hover:bg-pink-700 text-white font-bold py-2 px-4 mb-6 rounded" type="submit">Login</button>
-          </div>
-        </form>
-        <footer>
-          <a class="text-indigo-700 hover:text-pink-700 text-sm float-left" href="#">Forgot Password?</a>
-          <a class="text-indigo-700 hover:text-pink-700 text-sm float-right" href="#">Create Account</a>
-        </footer>
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, FormFieldComponent],
+  template: ` <div
+    class="flex h-screen bg-gradient-to-r from-emerald-400 to-cyan-400"
+  >
+    <div class="w-full max-w-xs m-auto bg-white text-black rounded-lg shadow-md p-5">
+      <header>
+        <img class="w-20 mx-auto mb-5" src="images/jlc_logo.png" />
+      </header>
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <p class="mt-2 mb-8">Sign in to your account</p>
+
+        <app-form-field
+          [formGroup]="form"
+          controlName="email"
+          label="Email"
+          placeholder="Enter your email"
+          type="email"
+          autocomplete="email"
+        />
+        <app-form-field
+          [formGroup]="form"
+          controlName="password"
+          label="Password"
+          placeholder="Enter your password"
+          type="password"
+          autocomplete="password"
+        />
+        <button
+          type="submit"
+          class="w-full my-2 mx-0 p-2 border-0 rounded-lg text-sm leading-6 font-medium bg-purple-600 text-white hover:bg-purple-500 hover:cursor-pointer"
+        >
+          Sign in
+        </button>
+        @if (submitted && error) {
+        <p class="text-red my-2 text-sm float-left w-full">{{ error }}</p>
+        }
+      </form>
+      <div class="text-gray-500 m-0 text-sm float-left w-full">
+        <p class="mt-2">
+          New to OIS?
+          <a
+            href="#"
+            routerLink="/create-account"
+            class="text-purple-600 font-medium text-xxs underline"
+            >Create account</a
+          >
+        </p>
+        <p class="mt-2">
+          Forgot your passsword?
+          <a
+            href="#"
+            routerLink="/forgot-password"
+            class="text-purple-600 font-medium text-xxs underline"
+            >Reset password</a
+          >
+        </p>
       </div>
-</div>`,
-  styleUrl: './login.component.css',
+      <footer>
+        <a
+          class="text-emerald-700 hover:text-emerald-700 text-sm float-left"
+          routerLink="/register"
+          >Forgot Password?</a
+        >
+        <a
+          class="text-emerald-700 hover:text-emerald-700 text-sm float-right"
+          routerLink="/register"
+          >Create Account</a
+        >
+      </footer>
+    </div>
+  </div>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit{
+  public form!: FormGroup;
+  public loading = false;
+  public submitted = false;
+  public error = '';
 
-  private formBuilder = inject(FormBuilder);
 
-  public loginForm !: FormGroup;
-
-  constructor() {
-    this.loginForm = this.formBuilder.group({
-      email:  [''],
-      password: ['']
-    });
-  }
+  public loginForm!: FormGroup;
 
   handleLoginSubmit() {
     console.log(this.loginForm.value);
+  }
+  public onSubmit(): void {
+    this.submitted = true;
+
+    if (!this.form.valid) {
+      return;
+    }
+
+    this.error = '';
+    this.loading = true;
+    console.log(this.form.value)
+    // this.authenticationService.login(this.form.value.email, this.form.value.password).subscribe({
+    //   next: response => {
+    //     if (response) {
+    //       // get return url from route parameters or default to '/'
+    //       const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+    //       this.router.navigate([returnUrl]);
+    //     } else {
+    //       if (response) {
+    //         this.error = 'Login Failed';
+    //       }
+    //     }
+    //   },
+    //   error: error => {
+    //     console.log(error);
+    //     this.error = 'Login Failed';
+    //     this.loading = false;
+    //   }
+    // });
+  }
+
+  ngOnInit(): void {
+    this.form = new FormGroup({
+      email: new FormControl('', [Validators.required, Validators.email]),
+      password: new FormControl('', Validators.required)
+    });
   }
 }

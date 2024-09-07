@@ -11,30 +11,10 @@ export class Menu {
           label: 'Transactions',
           route: '/home',
         },
-        {
-          icon: 'icons/heroicons/outline/lock-closed.svg',
-          label: 'Auth',
-          route: '/auth',
-        },
-        {
-          icon: 'icons/heroicons/outline/exclamation-triangle.svg',
-          label: 'Erros',
-          route: '/errors',
-          children: [
-            { label: '404', route: '/errors/404' },
-            { label: '500', route: '/errors/500' },
-          ],
-        },
-        {
-          icon: 'icons/heroicons/outline/cube.svg',
-          label: 'Components',
-          route: '/components',
-          children: [{ label: 'Table', route: '/components/table' }],
-        },
       ],
     },
     {
-      group: 'Collaboration',
+      group: 'Admin',
       separator: true,
       items: [
         {
@@ -55,7 +35,7 @@ export class Menu {
       ],
     },
     {
-      group: 'Config',
+      group: 'Manager',
       separator: false,
       items: [
         {

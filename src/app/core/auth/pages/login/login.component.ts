@@ -9,15 +9,14 @@ import { FormFieldComponent } from '../../../../shared/components/form-field/for
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterLink, FormFieldComponent],
   template: ` <div
-    class="flex h-screen bg-gradient-to-r from-emerald-400 to-cyan-400"
+    class="flex h-screen"
   >
     <div class="w-full max-w-xs m-auto bg-white text-black rounded-lg shadow-md p-5">
       <header>
-        <img class="w-20 mx-auto mb-5" src="images/jlc_logo.png" />
+        <img class="w-20 mx-auto" src="images/jlc_logo.png" />
       </header>
       <form [formGroup]="form" (ngSubmit)="onSubmit()">
-        <p class="mt-2 mb-8">Sign in to your account</p>
-
+        <p class="mt-2 font-bold">Sign in to your account</p>
         <app-form-field
           [formGroup]="form"
           controlName="email"
@@ -36,7 +35,7 @@ import { FormFieldComponent } from '../../../../shared/components/form-field/for
         />
         <button
           type="submit"
-          class="w-full my-2 mx-0 p-2 border-0 rounded-lg text-sm leading-6 font-medium bg-purple-600 text-white hover:bg-purple-500 hover:cursor-pointer"
+          class="w-full my-2 mx-0 p-2 border-0 rounded-lg text-sm leading-6 font-medium bg-emerald-600 text-white hover:bg-emerald-500 hover:cursor-pointer"
         >
           Sign in
         </button>
@@ -44,26 +43,6 @@ import { FormFieldComponent } from '../../../../shared/components/form-field/for
         <p class="text-red my-2 text-sm float-left w-full">{{ error }}</p>
         }
       </form>
-      <div class="text-gray-500 m-0 text-sm float-left w-full">
-        <p class="mt-2">
-          New to OIS?
-          <a
-            href="#"
-            routerLink="/create-account"
-            class="text-purple-600 font-medium text-xxs underline"
-            >Create account</a
-          >
-        </p>
-        <p class="mt-2">
-          Forgot your passsword?
-          <a
-            href="#"
-            routerLink="/forgot-password"
-            class="text-purple-600 font-medium text-xxs underline"
-            >Reset password</a
-          >
-        </p>
-      </div>
       <footer>
         <a
           class="text-emerald-700 hover:text-emerald-700 text-sm float-left"

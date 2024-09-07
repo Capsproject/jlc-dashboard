@@ -20,6 +20,16 @@ export const routes: Routes = [
     ]
   },
   {
+    path: 'customer',
+    loadComponent: ()  => import('./core/layout/customer/customer.component').then(m => m.CustomerComponent),
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('./core/layout/customer/customer.routes').then(m => m.customerRoutees),
+      }
+    ]
+  },
+  {
     path: '',
     pathMatch: 'full',
     redirectTo: 'home',

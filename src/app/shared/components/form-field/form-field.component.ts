@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, Input } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { FormvalidationService } from '../../../core/formvalidation.service';
+import { FormvalidationService } from '../../../core/services/formvalidation.service';
 
 @Component({
   selector: 'app-form-field',
@@ -22,7 +22,6 @@ import { FormvalidationService } from '../../../core/formvalidation.service';
     [autocomplete]="autocomplete"
     >
   </div>`,
-  styleUrl: './form-field.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FormFieldComponent {

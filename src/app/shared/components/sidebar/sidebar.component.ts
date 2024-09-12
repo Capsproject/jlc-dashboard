@@ -47,7 +47,7 @@ import packageJson from '../../../../../package.json';
       href="https://github.com/luciano-work/angular-tailwind"
       class="group flex h-9 cursor-pointer items-center justify-start rounded p-2 hover:bg-card">
       <svg-icon
-        src="assets/icons/heroicons/outline/information-circle.svg"
+        src="icons/heroicons/outline/information-circle.svg"
         [svgClass]="'h-5 w-5 text-muted-foreground/50'">
       </svg-icon>
 

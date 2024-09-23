@@ -16,7 +16,7 @@ import packageJson from '../../../../../package.json';
   >
     <div class="px-4">
       <!-- Logo -->
-      <div class="relative h-10">
+      <div class="relative h-12">
         <div class="flex items-center" *ngIf="menuService.showSideBar">
           <a
             (click)="toggleSidebar()"

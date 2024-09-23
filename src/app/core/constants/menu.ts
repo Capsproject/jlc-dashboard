@@ -9,7 +9,7 @@ export class Menu {
         {
           icon: 'icons/heroicons/outline/chart-pie.svg',
           label: 'Transactions',
-          route: '/home',
+          route: '/customer/home',
         },
       ],
     },
@@ -30,7 +30,7 @@ export class Menu {
         {
           icon: 'icons/heroicons/outline/users.svg',
           label: 'Users',
-          route: '/users',
+          route: '/admin/users',
         },
       ],
     },

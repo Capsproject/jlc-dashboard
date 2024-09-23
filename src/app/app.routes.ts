@@ -27,6 +27,29 @@ export const routes: Routes = [
         path: '',
         loadChildren: () => import('./core/layout/customer/customer.routes').then(m => m.customerRoutees),
       }
+    ],
+    data: {
+      breadcrumbs :  'Customer',
+    }
+  },
+  {
+    path: 'admin',
+    loadComponent: () => import('./core/layout/admin/admin/admin.component').then(m => m.AdminComponent),
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('./core/layout/admin/admin/admin.routes').then(m => m.adminRoutes),
+      }
+    ]
+  },
+  {
+    path: 'home',
+    loadComponent: () => import('./core/layout/home/home/home.component').then(m => m.HomeComponent),
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('./core/layout/home/home.routes').then(m => m.homeRoutes),
+      }
     ]
   },
   {

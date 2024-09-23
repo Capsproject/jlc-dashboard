@@ -17,12 +17,12 @@ import { ColumnInterface } from './models/data-table';
   imports: [CommonModule, AngularSvgIconModule],
   template: `
     @if((pageData$ | async); as pageData){
-    <div style="height: 300px;margin-bottom: 10px;">
-      <table class="table table-fixed">
+    <div>
+      <table class="table table-fixed text-gray-700">
         <thead>
           <tr>
             @for(column of columns; track $index){
-            <th [class]="column.class ? column.class : ''">
+            <th [class]="column.class ? [column.class, 'text-gray-800'] : ''">
               @if(column.tableHeaderType === 'checkbox'){
               <label>
                 <input type="checkbox" class="checkbox" />
@@ -37,7 +37,7 @@ import { ColumnInterface } from './models/data-table';
         <tbody>
           @for(instance of pageData; track instance.id; let i = $index){
           <tr>
-            @for(column of columns;track $index){
+            @for(column of columns; track $index){
             <td>
               @switch(column.tableBodyType){ @case ("text") {
               {{ instance[column.key] }}
@@ -110,7 +110,7 @@ export class TableComponent {
   isLastPage$: Observable<boolean> = new BehaviorSubject(false);
   isFirstPage$: Observable<boolean> = new BehaviorSubject(true);
   totalPage: number = 0;
-  itemsPerPage: number = 4;
+  itemsPerPage: number = 13;
   totalItems: number = 0;
 
   ngOnInit(): void {

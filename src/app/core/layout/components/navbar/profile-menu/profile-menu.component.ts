@@ -32,11 +32,11 @@ import { ClickOutsideDirective } from '../../../../../shared/directives/click-ou
     ]),
   ],
   template: `
-    <div class="relative ml-3">
+    <div class="relative ml-3 ">
       <!-- Profile Button -->
       <button
         (click)="toggleMenu()"
-        class="relative flex rounded-full bg-card text-sm"
+        class="relative flex rounded-full text-sm"
         type="button"
       >
         <span class="sr-only">Open user menu</span>
@@ -51,7 +51,7 @@ import { ClickOutsideDirective } from '../../../../../shared/directives/click-ou
       <!-- Dropdown -->
       <div
         [@openClose]="isOpen ? 'open' : 'closed'"
-        class="absolute right-0 z-20 mt-2 w-60 origin-top-right transform rounded-md bg-background py-4 shadow-custom ring-1 ring-transparent ring-opacity-5 transition focus:outline-none"
+        class="absolute right-0 z-20 mt-2 w-60 origin-top-right transform rounded-md bg-white text-gray-800 py-4 shadow-custom ring-1 ring-transparent ring-opacity-5 transition focus:outline-none"
       >
         <div class="flext-row flex items-center px-4 pb-4">
           <div class="w-10 shrink-0">

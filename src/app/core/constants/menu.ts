@@ -25,7 +25,7 @@ export class Menu {
         {
           icon: 'icons/heroicons/outline/gift.svg',
           label: 'Gift Card',
-          route: '/gift',
+          route: '/gift', 
         },
         {
           icon: 'icons/heroicons/outline/users.svg',

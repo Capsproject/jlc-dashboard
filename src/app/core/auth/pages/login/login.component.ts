@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormFieldComponent } from '../../../../shared/components/form-field/form-field.component';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -65,8 +66,12 @@ export class LoginComponent implements OnInit{
   public submitted = false;
   public error = '';
 
-
   public loginForm!: FormGroup;
+
+
+  private readonly authenticationService = inject(AuthService);
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
 
   handleLoginSubmit() {
     console.log(this.loginForm.value);
@@ -80,25 +85,24 @@ export class LoginComponent implements OnInit{
 
     this.error = '';
     this.loading = true;
-    console.log(this.form.value)
-    // this.authenticationService.login(this.form.value.email, this.form.value.password).subscribe({
-    //   next: response => {
-    //     if (response) {
-    //       // get return url from route parameters or default to '/'
-    //       const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-    //       this.router.navigate([returnUrl]);
-    //     } else {
-    //       if (response) {
-    //         this.error = 'Login Failed';
-    //       }
-    //     }
-    //   },
-    //   error: error => {
-    //     console.log(error);
-    //     this.error = 'Login Failed';
-    //     this.loading = false;
-    //   }
-    // });
+    this.authenticationService.login(this.form.controls['email'].value , this.form.controls['password'].value).subscribe({
+      next: response => {
+        if (response) {
+          // get return url from route parameters or default to '/'
+          const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+          this.router.navigate([returnUrl]);
+        } else {
+          if (response) {
+            this.error = 'Login Failed';
+          }
+        }
+      },
+      error: error => {
+        console.log(error);
+        this.error = 'Login Failed';
+        this.loading = false;
+      }
+    });
   }
 
   ngOnInit(): void {

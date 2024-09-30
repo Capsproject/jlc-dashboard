@@ -7,6 +7,11 @@ export const authRoutes : Routes = [
     title: 'Login - JLC Service Center'
   },
   {
+    path: 'register',
+    loadComponent: () => import('./pages/register/register.component').then(m => m.RegisterComponent),
+    title: 'Register - JLC Service Center'
+  },
+  {
     path: '',
     pathMatch: 'full',
     redirectTo: 'login'

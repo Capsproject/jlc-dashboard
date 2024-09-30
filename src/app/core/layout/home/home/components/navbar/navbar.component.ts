@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   template: `<header>
     <nav
       class="
@@ -51,26 +52,23 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
         >
           <li>
             <a class="md:p-4 py-2 block hover:text-purple-400" href="#"
-              >Features</a
+              >Home</a
             >
           </li>
           <li>
             <a class="md:p-4 py-2 block hover:text-purple-400" href="#"
-              >Pricing</a
+              >About</a
             >
           </li>
           <li>
             <a class="md:p-4 py-2 block hover:text-purple-400" href="#"
-              >Customers</a
+              >Service</a
             >
-          </li>
-          <li>
-            <a class="md:p-4 py-2 block hover:text-purple-400" href="#">Blog</a>
           </li>
           <li>
             <a
               class="md:p-4 py-2 block hover:text-purple-400 text-purple-500"
-              href="#"
+              [routerLink]="['/auth/register']" routerLinkActive="router-link-active"
               >Sign Up</a
             >
           </li>

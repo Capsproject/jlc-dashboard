@@ -13,6 +13,6 @@ export const customerRoutees: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'customer',
-  },
-];
+    redirectTo: 'home',
+  }
+]

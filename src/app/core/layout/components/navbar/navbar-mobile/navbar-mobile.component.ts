@@ -15,9 +15,9 @@ import { SubMenuItem } from '../../../../models/menu.models.';
         ? 'pointer-events-auto scale-100 animate-fade-in-up opacity-100 duration-200'
         : 'pointer-events-none scale-95 opacity-0 duration-100 ease-out'
     "
-    class="absolute inset-x-0 top-0 z-10 origin-top-right transform p-2 transition md:hidden"
+    class="absolute inset-x-0 top-1 z-10 origin-top-right transform p-2 transition md:hidden"
   >
-    <div class="rounded-lg bg-background shadow-lg">
+    <div class="rounded-lg bg-white shadow-lg">
       <div class="pt-5 pb-6">
         <div class="flex items-center justify-between px-5">
           <div>
@@ -28,7 +28,7 @@ import { SubMenuItem } from '../../../../models/menu.models.';
               <a
                 class="flex items-center justify-center rounded bg-primary p-2 focus:outline-none focus:ring-1"
               >
-                <svg-icon src="icons/logo.svg"> </svg-icon>
+                <svg-icon src="icons/logo.svg" />
               </a>
               <b class="pl-3 text-sm font-bold text-foreground">
                 Angular Tailwind

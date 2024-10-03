@@ -74,7 +74,7 @@ export class LoginComponent implements OnInit{
   private readonly route = inject(ActivatedRoute);
 
   handleLoginSubmit() {
-    console.log(this.loginForm.value);
+    this.authenticationService.login(this.loginForm.controls['email'].value, this.loginForm.controls['password'].value);
   }
   public onSubmit(): void {
     this.submitted = true;

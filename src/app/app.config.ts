@@ -3,8 +3,9 @@ import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideAngularSvgIcon } from 'angular-svg-icon';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
+import { httpInterceptorsInterceptor } from './core/interceptors/http-interceptors.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -12,6 +13,8 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideAngularSvgIcon(),
     provideHttpClient(),
-    provideAnimations()
+    provideAnimations(),
+
+    provideHttpClient(withInterceptors([httpInterceptorsInterceptor])),
   ],
 };

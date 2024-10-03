@@ -1,4 +1,7 @@
+import { inject } from '@angular/core';
 import { Routes } from '@angular/router';
+import { AuthService } from './core/auth/services/auth.service';
+import { map } from 'rxjs';
 
 export const routes: Routes = [
   {
@@ -22,6 +25,7 @@ export const routes: Routes = [
   {
     path: 'customer',
     loadComponent: ()  => import('./core/layout/customer/customer.component').then(m => m.CustomerComponent),
+    // canActivate: [() => inject(AuthService).isAuthenticated.pipe(map(isAuth => isAuth))],
     children: [
       {
         path: '',
@@ -35,6 +39,7 @@ export const routes: Routes = [
   {
     path: 'admin',
     loadComponent: () => import('./core/layout/admin/admin/admin.component').then(m => m.AdminComponent),
+    canActivate: [() => inject(AuthService).isAuthenticated.pipe(map(isAuth => isAuth))],
     children: [
       {
         path: '',

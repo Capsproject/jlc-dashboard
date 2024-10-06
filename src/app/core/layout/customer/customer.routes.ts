@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { hasRoleGuard } from '../../guard/has-role.guard';
 
 export const customerRoutees: Routes = [
   {
@@ -8,11 +9,12 @@ export const customerRoutees: Routes = [
         (m) => m.JobOrderComponent
       ),
     title: 'Home - Customer',
-    data: { breadcrumbs: 'Home' },
+    canActivate: [hasRoleGuard],
+    data: { breadcrumbs: 'Home', role: ['customer'] },
   },
   {
     path: '',
     pathMatch: 'full',
     redirectTo: 'home',
-  }
-]
+  },
+];

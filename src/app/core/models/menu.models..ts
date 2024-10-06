@@ -1,5 +1,6 @@
 export interface MenuModels {
   group: string;
+  roles: string[];
   separator?: boolean;
   selected?: boolean;
   active?: boolean;

@@ -74,7 +74,7 @@ export class BreadcrumbsComponent implements OnInit {
         label: child.snapshot.data['breadcrumb'] || this.capitalize(routeURL),
         url,
       };
-
+      console.log(breadcrumb);
       breadcrumbs.push(breadcrumb);
 
       return this.buildBreadcrumbs(child, url, breadcrumbs);

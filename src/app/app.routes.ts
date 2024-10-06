@@ -2,6 +2,9 @@ import { inject } from '@angular/core';
 import { Routes } from '@angular/router';
 import { AuthService } from './core/auth/services/auth.service';
 import { map } from 'rxjs';
+import { hastokenGuard } from './core/guard/hastoken.guard';
+import { isAuthenticatedGuard } from './core/guard/isAuthenticated.guard';
+import { hasRoleGuard } from './core/guard/has-role.guard';
 
 export const routes: Routes = [
   {
@@ -14,52 +17,79 @@ export const routes: Routes = [
   },
   {
     path: 'auth',
-    loadComponent: () => import('./core/auth/auth.component').then(m => m.AuthComponent),
+    loadComponent: () =>
+      import('./core/auth/auth.component').then((m) => m.AuthComponent),
+    canActivate: [hastokenGuard],
     children: [
       {
         path: '',
-        loadChildren: () => import('./core/auth/auth.routes').then(m => m.authRoutes),
-      }
-    ]
+        loadChildren: () =>
+          import('./core/auth/auth.routes').then((m) => m.authRoutes),
+      },
+    ],
   },
   {
     path: 'customer',
-    loadComponent: ()  => import('./core/layout/customer/customer.component').then(m => m.CustomerComponent),
-    // canActivate: [() => inject(AuthService).isAuthenticated.pipe(map(isAuth => isAuth))],
+    loadComponent: () =>
+      import('./core/layout/customer/customer.component').then(
+        (m) => m.CustomerComponent
+      ),
+    canActivate: [isAuthenticatedGuard],
     children: [
       {
         path: '',
-        loadChildren: () => import('./core/layout/customer/customer.routes').then(m => m.customerRoutees),
-      }
+        loadChildren: () =>
+          import('./core/layout/customer/customer.routes').then(
+            (m) => m.customerRoutees
+          ),
+        canActivate: [hasRoleGuard],
+        data: {
+          breadcrumbs: 'Customer',
+          roles: ['customer'],
+        },
+      },
     ],
-    data: {
-      breadcrumbs :  'Customer',
-    }
   },
   {
     path: 'admin',
-    loadComponent: () => import('./core/layout/admin/admin/admin.component').then(m => m.AdminComponent),
-    canActivate: [() => inject(AuthService).isAuthenticated.pipe(map(isAuth => isAuth))],
+    loadComponent: () =>
+      import('./core/layout/admin/admin/admin.component').then(
+        (m) => m.AdminComponent
+      ),
+    canActivate: [isAuthenticatedGuard],
     children: [
       {
         path: '',
-        loadChildren: () => import('./core/layout/admin/admin/admin.routes').then(m => m.adminRoutes),
-      }
-    ]
+        loadChildren: () =>
+          import('./core/layout/admin/admin/admin.routes').then(
+            (m) => m.adminRoutes
+          ),
+          canActivate: [hasRoleGuard],
+          data: {
+            breadcrumbs: 'Admin',
+            roles: ['superadmin'],
+          },
+      },
+    ],
   },
   {
     path: 'home',
-    loadComponent: () => import('./core/layout/home/home/home.component').then(m => m.HomeComponent),
+    loadComponent: () =>
+      import('./core/layout/home/home/home.component').then(
+        (m) => m.HomeComponent
+      ),
     children: [
       {
         path: '',
-        loadChildren: () => import('./core/layout/home/home.routes').then(m => m.homeRoutes),
-      }
-    ]
+        loadChildren: () =>
+          import('./core/layout/home/home.routes').then((m) => m.homeRoutes),
+      },
+    ],
   },
   {
     path: 'home',
-    loadComponent: () => import('./features/home/home.component').then(m => m.HomeComponent),
+    loadComponent: () =>
+      import('./features/home/home.component').then((m) => m.HomeComponent),
   },
   {
     path: '',

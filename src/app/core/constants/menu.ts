@@ -5,6 +5,7 @@ export class Menu {
     {
       group: 'Job Order',
       separator: false,
+      roles: ['superadmin', 'admin', 'manager'],
       items: [
         {
           icon: 'icons/heroicons/outline/chart-pie.svg',
@@ -16,6 +17,7 @@ export class Menu {
     {
       group: 'Admin',
       separator: true,
+      roles: ['superadmin'],
       items: [
         {
           icon: 'icons/heroicons/outline/download.svg',
@@ -25,7 +27,7 @@ export class Menu {
         {
           icon: 'icons/heroicons/outline/gift.svg',
           label: 'Gift Card',
-          route: '/gift', 
+          route: '/gift',
         },
         {
           icon: 'icons/heroicons/outline/users.svg',
@@ -35,8 +37,9 @@ export class Menu {
       ],
     },
     {
-      group: 'Manager',
+      group: 'All',
       separator: false,
+      roles: ['manager'],
       items: [
         {
           icon: 'icons/heroicons/outline/cog.svg',

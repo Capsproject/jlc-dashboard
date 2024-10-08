@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://jlc-backend.test/api/v1',
+  apiUrl: 'http://localhost:8000/api/v1/',
   apiKey: '123456789',
   tokenName: 'jwtToken',
 };

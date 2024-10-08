@@ -1,11 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ColumnInterface } from '../../shared/components/table/models/data-table';
 import { Technician } from '../job-order/models/api-response.interface';
 import { FormControl } from '@angular/forms';
-import { Observable, of } from 'rxjs';
+import { map, Observable, of } from 'rxjs';
 import { dummyTechnician } from '../../../../dummy';
 import { TableComponent } from '../../shared/components/table/table.component';
 import { CommonModule } from '@angular/common';
+import { UserService } from './services/user.service';
+import { HttpResponse } from '@angular/common/http';
+import { ApiResponse } from '../../shared/models/api-response';
+import { Users } from './models/api-response';
 
 @Component({
   selector: 'app-user-management',
@@ -20,10 +24,11 @@ import { CommonModule } from '@angular/common';
     }`,
 })
 export class UserManagementComponent implements OnInit {
-  public data!: Observable<Technician[]>;
+  public data!: Observable<Users[]>;
   searchKey = new FormControl();
   searchKey$ = this.searchKey.valueChanges;
-  public tableColumns: ColumnInterface<Technician>[] = [
+  userServices = inject(UserService);
+  public tableColumns: ColumnInterface<Users>[] = [
     {
       name: 'ID No.',
       tableBodyType: 'text',
@@ -39,29 +44,50 @@ export class UserManagementComponent implements OnInit {
       class: 'w-1/3',
     },
     {
-      name: 'Skills',
+      name: 'Email',
       tableBodyType: 'text',
       tableHeaderType: 'text',
-      key: 'skills',
+      key: 'email',
       class: 'w-1/3',
     },
     {
-      name: 'Location',
+      name: 'Active',
       tableBodyType: 'text',
       tableHeaderType: 'text',
-      key: 'location',
+      key: 'is_enabled',
       class: 'w-1/3',
     },
     {
-      name: 'Availability',
+      name: 'Created',
       tableBodyType: 'text',
       tableHeaderType: 'text',
-      key: 'availability',
+      key: 'created_at',
       class: 'w-1/3',
     },
   ];
 
   ngOnInit(): void {
-    this.data = of(dummyTechnician);
+    this.fetchUsers();
+  }
+
+  fetchUsers() {
+    this.userServices
+      .getAllUsers()
+      .pipe(
+      )
+      .subscribe({
+        next: (res: HttpResponse<ApiResponse>) => {
+            this.data = of(
+            res.body?.data
+              .map((user: { created_at: string | number | Date, is_enabled: number }) => ({
+              ...user,
+              created_at: new Date(user.created_at).toDateString(),
+              is_enabled: user.is_enabled === 1 ? 'Active' : 'Inactive',
+              }))
+              .sort((a: { id: number; }, b: { id: number; }) => a.id - b.id)
+            )
+          console.log(this.data);
+        },
+      });
   }
 }

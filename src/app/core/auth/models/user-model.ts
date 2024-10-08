@@ -1,4 +1,3 @@
-import { ApiResponseModel } from './api-response-model';
 
 export interface UserModel {
   id: number;
@@ -16,3 +15,5 @@ export interface UserModel {
     updated_at: string;
   };
 }
+
+

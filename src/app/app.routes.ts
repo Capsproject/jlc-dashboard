@@ -67,7 +67,7 @@ export const routes: Routes = [
           canActivate: [hasRoleGuard],
           data: {
             breadcrumbs: 'Admin',
-            roles: ['superadmin'],
+            roles: ['admin'],
           },
       },
     ],

@@ -7,7 +7,7 @@ import { environment } from '../../../environments/environment.development';
 export const httpInterceptorsInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
 
-  const authToken = localStorage.getItem('authToken');
+  const authToken = localStorage.getItem(environment.tokenName);
 
   req = req.clone({
     setHeaders: {

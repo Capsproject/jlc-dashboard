@@ -18,7 +18,7 @@ import { ColumnInterface } from './models/data-table';
   template: `
     @if((pageData$ | async); as pageData){
     <div>
-      <table class="table table-fixed text-gray-700">
+      <table class="table table-fixed text-gray-700 drop-shadow-lg">
         <thead>
           <tr>
             @for(column of columns; track $index){
@@ -110,10 +110,12 @@ export class TableComponent {
   isLastPage$: Observable<boolean> = new BehaviorSubject(false);
   isFirstPage$: Observable<boolean> = new BehaviorSubject(true);
   totalPage: number = 0;
-  itemsPerPage: number = 13;
+  itemsPerPage: number = 17;
   totalItems: number = 0;
 
   ngOnInit(): void {
+
+    console.log(this.data$);
     if (this.data$ !== null) {
       this.data$ = this.data$.pipe(
         tap((data) => {

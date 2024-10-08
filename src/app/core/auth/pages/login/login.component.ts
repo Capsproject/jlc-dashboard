@@ -4,6 +4,7 @@ import {
   Component,
   inject,
   OnInit,
+  signal,
 } from '@angular/core';
 import {
   FormControl,
@@ -14,7 +15,11 @@ import {
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormFieldComponent } from '../../../../shared/components/form-field/form-field.component';
 import { AuthService } from '../../services/auth.service';
-import { UserModel } from '../../user-model';
+import { Subscription } from 'rxjs';
+import { HttpResponse } from '@angular/common/http';
+import { AlertService } from '../../../../shared/services/alert.service';
+import { LoginService } from '../../services/login.service';
+import { ApiResponseModel } from '../../models/api-response-model';
 
 @Component({
   selector: 'app-login',
@@ -27,7 +32,7 @@ import { UserModel } from '../../user-model';
       <header>
         <img class="w-20 mx-auto" src="images/jlc_logo.png" />
       </header>
-      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <form [formGroup]="form" (ngSubmit)="handleLoginSubmit()">
         <p class="mt-2 font-bold">Sign in to your account</p>
         <app-form-field
           [formGroup]="form"
@@ -74,54 +79,38 @@ import { UserModel } from '../../user-model';
 })
 export class LoginComponent implements OnInit {
   public form!: FormGroup;
-  public loading = false;
+  public isLoadingButton = signal(false);
   public submitted = false;
   public error = '';
 
-  public loginForm!: FormGroup;
 
   private readonly authenticationService = inject(AuthService);
+  private readonly loginService = inject(LoginService);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
+  private readonly _alertService = inject(AlertService);
+
+  private loginSubscription: Subscription = new Subscription();
 
   handleLoginSubmit() {
-    this.authenticationService.login(
-      this.loginForm.controls['email'].value,
-      this.loginForm.controls['password'].value
-    );
-  }
-  public onSubmit(): void {
-    this.submitted = true;
-    if (!this.form.valid) {
-      return;
-    }
-
-    this.error = '';
-    this.loading = true;
-    this.authenticationService
-      .login(
-        this.form.controls['email'].value,
-        this.form.controls['password'].value
-      )
-      .subscribe({
-        next: (response) => {
-          if (response) {
-            // get return url from route parameters or default to '/'
-            const returnUrl =
-              this.route.snapshot.queryParams['returnUrl'] || '/';
-            this.router.navigate([returnUrl]);
-          } else {
-            if (response) {
-              this.error = 'Login Failed';
-            }
+    this.loginSubscription.add(
+      this.loginService.onLogin(this.form.value).subscribe({
+        next: (response: HttpResponse<object>) =>{
+          if (response.status === 200) {
+            this.isLoadingButton.set(false);
+            this.authenticationService.setAuth(response.body as ApiResponseModel);
+            this._alertService.handleSuccess('Login Successfull');
+            setTimeout(() => {
+              if (this.authenticationService.user()?.user_role.name === 'admin') {
+                this.router.navigate(['admin/']);
+              } else {
+                this.router.navigate(['home/']);
+              }
+            }, 2000);
           }
-        },
-        error: (error) => {
-          console.log(error);
-          this.error = 'Login Failed';
-          this.loading = false;
-        },
-      });
+        }
+      })
+    )
   }
 
   ngOnInit(): void {

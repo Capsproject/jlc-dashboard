@@ -12,7 +12,7 @@ import packageJson from '../../../../../package.json';
   imports: [CommonModule, SidebarMenuComponent, SvgIconComponent],
   template: `<nav
     [ngClass]="menuService.showSideBar ? 'w-52 xl:w-64' : 'w-[70px]'"
-    class="scrollbar-thumb-rounded scrollbar-track-rounded hidden h-full flex-col justify-between overflow-auto bg-background pt-3 transition-all duration-300 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-card lg:flex"
+    class="scrollbar-thumb-rounded scrollbar-track-rounded hidden h-full drop-shadow-lg flex-col justify-between overflow-auto bg-background pt-3 transition-all duration-300 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-card lg:flex"
   >
     <div class="px-4">
       <!-- Logo -->

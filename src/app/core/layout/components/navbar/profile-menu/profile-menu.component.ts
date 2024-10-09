@@ -1,14 +1,26 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
+import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
 import { AngularSvgIconModule } from 'angular-svg-icon';
 import { ClickOutsideDirective } from '../../../../../shared/directives/click-outside.directive';
+import { AuthService } from '../../../../auth/services/auth.service';
 
 @Component({
   selector: 'app-profile-menu',
   standalone: true,
-  imports: [CommonModule, RouterLink, AngularSvgIconModule, ClickOutsideDirective],
+  imports: [
+    CommonModule,
+    RouterLink,
+    AngularSvgIconModule,
+    ClickOutsideDirective,
+  ],
   animations: [
     trigger('openClose', [
       state(
@@ -17,7 +29,7 @@ import { ClickOutsideDirective } from '../../../../../shared/directives/click-ou
           opacity: 1,
           transform: 'translateY(0)',
           visibility: 'visible',
-        }),
+        })
       ),
       state(
         'closed',
@@ -25,7 +37,7 @@ import { ClickOutsideDirective } from '../../../../../shared/directives/click-ou
           opacity: 0,
           transform: 'translateY(-20px)',
           visibility: 'hidden',
-        }),
+        })
       ),
       transition('open => closed', [animate('0.2s')]),
       transition('closed => open', [animate('0.2s')]),
@@ -78,7 +90,7 @@ import { ClickOutsideDirective } from '../../../../../shared/directives/click-ou
         <ul class="my-2 mx-4 flex flex-col">
           @for (item of profileMenu; track $index) {
           <li
-            routerLink="{{ item.link }}"
+            (click)="handleClickMenu(item.click)"
             :key="$index"
             class="inline-flex cursor-pointer items-center gap-2 rounded-md px-3 py-2 text-xs font-semibold text-muted-foreground hover:bg-card hover:text-primary"
           >
@@ -92,83 +104,34 @@ import { ClickOutsideDirective } from '../../../../../shared/directives/click-ou
           }
         </ul>
         <hr class="border-dashed border-border" />
-        <div class="mx-4 my-2">
-          <span class="text-xs font-semibold text-foreground">Color</span>
-          <div class="mt-2 grid grid-cols-2 gap-2">
-            @for (item of themeColors; track $index) {
-            <div
-              :key="$index"
-              class="focus-visible:ring-ring inline-flex h-8 cursor-pointer items-center justify-start whitespace-nowrap rounded-md border border-border bg-background px-3 text-xs font-medium text-muted-foreground shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 disabled:pointer-events-none disabled:opacity-50 hover:bg-card hover:text-foreground"
-            >
-              <span
-                [style.backgroundColor]="item.code"
-                class="mr-1 flex h-5 w-5 shrink-0 -translate-x-1 items-center justify-center rounded-full bg-rose-500"
-              ></span>
-              <p class="capitalize">{{ item.name }}</p>
-            </div>
-            }
-          </div>
-        </div>
       </div>
     </div>
   `,
   styleUrl: './profile-menu.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProfileMenuComponent implements OnInit{
+export class ProfileMenuComponent implements OnInit {
+
+  private readonly router = inject(Router);
+  private readonly auth  = inject(AuthService);
   public isOpen = false;
   public profileMenu = [
     {
       title: 'Your Profile',
       icon: './icons/heroicons/outline/user-circle.svg',
-      link: '/profile',
+      click: 0
     },
     {
       title: 'Settings',
       icon: './icons/heroicons/outline/cog-6-tooth.svg',
-      link: '/settings',
+      click: 1
     },
     {
       title: 'Log out',
       icon: './icons/heroicons/outline/logout.svg',
-      link: '/auth',
+      click: 2
     },
   ];
-
-  public themeColors = [
-    {
-      name: 'base',
-      code: '#e11d48',
-    },
-    {
-      name: 'yellow',
-      code: '#f59e0b',
-    },
-    {
-      name: 'green',
-      code: '#22c55e',
-    },
-    {
-      name: 'blue',
-      code: '#3b82f6',
-    },
-    {
-      name: 'orange',
-      code: '#ea580c',
-    },
-    {
-      name: 'red',
-      code: '#cc0022',
-    },
-    {
-      name: 'violet',
-      code: '#6d28d9',
-    },
-  ];
-
-  public themeMode = ['light', 'dark'];
-
-  // constructor(public themeService: ThemeService) {}
 
   ngOnInit(): void {}
 
@@ -176,16 +139,13 @@ export class ProfileMenuComponent implements OnInit{
     this.isOpen = !this.isOpen;
   }
 
-  // toggleThemeMode() {
-  //   this.themeService.theme.update((theme) => {
-  //     const mode = !this.themeService.isDark ? 'dark' : 'light';
-  //     return { ...theme, mode: mode };
-  //   });
-  // }
-
-  // toggleThemeColor(color: string) {
-  //   this.themeService.theme.update((theme) => {
-  //     return { ...theme, color: color };
-  //   });
-  // }
+  public handleClickMenu (i : number) {
+    if (i === 1) {
+      this.router.navigate(['/settings']);
+    } else if (i === 2) {
+      this.auth.logout();
+    } else if  (i === 0) {
+      this.router.navigate(['/profile']);
+    }
+  }
 }

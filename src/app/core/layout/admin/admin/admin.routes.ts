@@ -8,6 +8,6 @@ export const adminRoutes: Routes = [
         '../../../../features/user-management/user-management.component'
       ).then((m) => m.UserManagementComponent),
     title: 'User Management - Admin',
-    data: { breadcrumbs: 'User Management', role: ['admin'] },
+    data: { breadcrumbs: 'User Management', role: ['admin', 'owner'] },
   },
 ];

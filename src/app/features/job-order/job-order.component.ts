@@ -13,6 +13,10 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
   standalone: true,
   imports: [CommonModule, TableComponent, ReactiveFormsModule],
   template: ` @if (data) {
+    <button>
+      
+      Create Request
+    </button>
     <app-table [data$]="data" [columns]="tableColumns" [searchKey$]="searchKey$"></app-table>
     }`,
   changeDetection: ChangeDetectionStrategy.OnPush,

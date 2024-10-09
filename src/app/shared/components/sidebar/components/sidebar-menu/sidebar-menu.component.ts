@@ -12,6 +12,7 @@ import { MenuService } from '../../../../services/menu.service';
 import { SubMenuItem } from '../../../../../core/models/menu.models.';
 import { AngularSvgIconModule } from 'angular-svg-icon';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { AuthService } from '../../../../../core/auth/services/auth.service';
 
 @Component({
   selector: 'app-sidebar-menu',
@@ -24,7 +25,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
     CommonModule,
   ],
   template: `
-    @for (menu of menuService.pagesMenu; track $index) {
+    @for (menu of filteredMenu; track $index) {
     <div class="pt-4">
       <div class="mx-1 mb-2 flex items-center justify-between">
         <small
@@ -130,8 +131,24 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 })
 export class SidebarMenuComponent implements OnInit {
   public readonly menuService = inject(MenuService);
+  public authServices = inject(AuthService);
+  public filteredMenu: { items: SubMenuItem[]; group: string; roles: string[]; separator?: boolean; selected?: boolean; active?: boolean }[] = [];
   public toggleMenu(subMenu: SubMenuItem) {
     this.menuService.toggleMenu(subMenu);
   }
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.filterMenu();
+  }
+  private filterMenu() {
+    const userRoles = this.authServices.userInfo?.user_role.name; // Assume this returns an array of roles
+    const pagesMenu = this.menuService.pagesMenu;
+    this.filteredMenu = pagesMenu.filter(menuGroup =>
+      menuGroup.roles.some(role => userRoles?.includes(role))
+    ).map(menuGroup => ({
+      ...menuGroup,
+      items: menuGroup.items.filter(item =>
+        menuGroup.roles.some(role => userRoles?.includes(role))
+      )
+    }));
+  }
 }

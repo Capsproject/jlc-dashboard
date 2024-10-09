@@ -24,7 +24,6 @@ import { BreadcrumbsComponent } from '../../../shared/components/breadcrumbs/bre
         class="scrollbar-thumb-rounded scrollbar-track-rounded grow overflow-auto bg-white scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted"
       >
         <div class="mx-auto px-4 py-4 sm:px-8 lg:container">
-          <app-breadcrumbs />
           <router-outlet></router-outlet>
         </div>
       </div>

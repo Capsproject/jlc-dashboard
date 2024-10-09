@@ -29,6 +29,28 @@ export const routes: Routes = [
     ],
   },
   {
+    path: 'owner',
+    loadComponent: () =>
+      import('./core/layout/owner/owner/owner.component').then(
+        (m) => m.OwnerComponent
+      ),
+    // canActivate: [hastokenGuard],
+    children: [
+      {
+        path: '',
+        loadChildren: () =>
+          import('./core/layout/owner/owner/owner.routes').then(
+            (m) => m.ownerRoutes
+          ),
+        // canActivate: [hasRoleGuard],
+        data: {
+          breadcrumbs: 'Owner',
+          role: ['owner'],
+        },
+      },
+    ],
+  },
+  {
     path: 'customer',
     loadComponent: () =>
       import('./core/layout/customer/customer.component').then(
@@ -64,11 +86,11 @@ export const routes: Routes = [
           import('./core/layout/admin/admin/admin.routes').then(
             (m) => m.adminRoutes
           ),
-          canActivate: [hasRoleGuard],
-          data: {
-            breadcrumbs: 'Admin',
-            roles: ['admin'],
-          },
+        canActivate: [hasRoleGuard],
+        data: {
+          breadcrumbs: 'Admin',
+          roles: ['admin'],
+        },
       },
     ],
   },

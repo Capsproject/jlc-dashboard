@@ -5,10 +5,15 @@ export class Menu {
     {
       group: 'Job Order',
       separator: false,
-      roles: ['superadmin', 'admin', 'manager'],
+      roles: ['customer'],
       items: [
         {
-          icon: 'icons/heroicons/outline/chart-pie.svg',
+          icon: 'icons/heroicons/outline/folder-plus.svg',
+          label: 'Request',
+          route: '/customer/request',
+        },
+        {
+          icon: 'icons/heroicons/solid/document.svg',
           label: 'Transactions',
           route: '/customer/home',
         },
@@ -17,7 +22,7 @@ export class Menu {
     {
       group: 'Admin',
       separator: true,
-      roles: ['superadmin'],
+      roles: ['admin'],
       items: [
         {
           icon: 'icons/heroicons/outline/download.svg',
@@ -28,11 +33,6 @@ export class Menu {
           icon: 'icons/heroicons/outline/gift.svg',
           label: 'Gift Card',
           route: '/gift',
-        },
-        {
-          icon: 'icons/heroicons/outline/users.svg',
-          label: 'Users',
-          route: '/admin/users',
         },
       ],
     },
@@ -51,17 +51,31 @@ export class Menu {
           label: 'Notifications',
           route: '/gift',
         },
+      ],
+    },
+    {
+      group: 'Manage Users',
+      separator: true,
+      roles: ['owner'],
+      items: [
         {
-          icon: 'icons/heroicons/outline/folder.svg',
-          label: 'Folders',
-          route: '/folders',
-          children: [
-            { label: 'Current Files', route: '/folders/current-files' },
-            { label: 'Downloads', route: '/folders/download' },
-            { label: 'Trash', route: '/folders/trash' },
-          ],
+          icon: 'icons/heroicons/outline/users.svg',
+          label: 'Users',
+          route: '/owner/users',
         },
       ],
     },
+    {
+      group: 'Analytics Dashboard',
+      separator: true,
+      roles: ['owner'],
+      items: [
+        {
+          icon: 'icons/heroicons/outline/chart-pie.svg',
+          label: 'Analytics Dashboard',
+          route: '/owner/dashboard',
+        },
+      ]
+    }
   ];
 }

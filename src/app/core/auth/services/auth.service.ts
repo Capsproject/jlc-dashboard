@@ -63,17 +63,10 @@ export class AuthService {
     this._isLoggedIn$.next(true);
   }
 
-  private getUser(token: string): UserModel | null {
-    if (!token) {
-      this.router.navigate(['']);
-      return null;
-    }
-    return JSON.parse(atob(token.split('.')[1])) as UserModel;
-  }
-
   public purgeAuth(): void {
     this.jwtService.destroyToken();
     this.currentUserSubject.next(null);
+    localStorage.removeItem('user');
   }
 
   public update(user: Partial<UserModel>): Observable<{ user: UserModel }> {

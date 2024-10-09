@@ -9,7 +9,6 @@ export const customerRoutees: Routes = [
         (m) => m.JobOrderComponent
       ),
     title: 'Home - Customer',
-    canActivate: [hasRoleGuard],
     data: { breadcrumbs: 'Home', role: ['customer'] },
   },
   {

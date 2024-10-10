@@ -4,6 +4,7 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnInit,
   Output,
 } from '@angular/core';
 import { AngularSvgIconModule } from 'angular-svg-icon';
@@ -12,12 +13,12 @@ import { AngularSvgIconModule } from 'angular-svg-icon';
   selector: 'app-button',
   standalone: true,
   imports: [CommonModule, AngularSvgIconModule],
-  template: `<button type="{{ type }}" [ngClass]="buttonStyle" class="flex flex-row">
-    @if(icon) {
-      <svg-icon src="{{ icon }}" svgClass="w-5 h-5" aria-hidden="true"></svg-icon>
+  template: `<button type="{{ type }}" [ngClass]="buttonStyle" class="flex flex-row gap-1">
+    @if(!loading) {
+      <svg-icon src="icons/heroicons/outline/plus-circle.svg" svgClass="w-5 h-5" aria-hidden="true"></svg-icon>
     }
     @if(loading) {
-    <div class="flex gap-2 justify-center">
+    <div class="flex gap-1 justify-center">
       <div
         class="w-5 h-5 rounded-full animate-spin border-2 border-solid border-gray-50 border-t-purple-300 my-auto"
       ></div>
@@ -29,7 +30,7 @@ import { AngularSvgIconModule } from 'angular-svg-icon';
   </button>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ButtonComponent {
+export class ButtonComponent implements OnInit{
   @Input() actionText!: string;
   @Input() icon?: string;
   @Input() type!: 'button' | 'submit' | 'reset';
@@ -39,6 +40,9 @@ export class ButtonComponent {
   @Input() loadingText?: string;
   @Output() action = new EventEmitter<void>();
 
+  ngOnInit(): void {
+    console.log(this.icon)
+  }
   public onClick(): void {
     this.action.emit();
   }

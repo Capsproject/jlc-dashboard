@@ -10,6 +10,7 @@ import {
   tap,
 } from 'rxjs';
 import { ColumnInterface } from './models/data-table';
+import { Users } from '../../../features/user-management/models/api-response';
 
 @Component({
   selector: 'app-table',
@@ -102,7 +103,7 @@ export class TableComponent {
   //** Input Decorators */
   @Input() searchKey$!: Observable<string>;
   @Input() columns: ColumnInterface<any>[] = [];
-  @Input() data$!: Observable<any[]>;
+  @Input() data$!: Observable<any[] | Users[]>;
 
   //** Properties */
   pageData$!: Observable<any[]>;

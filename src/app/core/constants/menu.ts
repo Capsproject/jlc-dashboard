@@ -3,6 +3,28 @@ import { MenuModels } from '../models/menu.models.';
 export class Menu {
   public static pages: MenuModels[] = [
     {
+      group: 'Owner',
+      separator: true,
+      roles: ['owner'],
+      items: [
+        {
+          icon: 'icons/heroicons/outline/calendar.svg',
+          label: 'Show Calendar',
+          route: '/owner/home',
+        },
+        {
+          icon: 'icons/heroicons/outline/cog.svg',
+          label: 'Schedule Job Orders',
+          route: '/admin/job-orders',
+        },
+        {
+          icon: 'icons/heroicons/outline/list.svg',
+          label: 'Technician List',
+          route: '/owner/users?accountType=technician'
+        }
+      ],
+    },
+    {
       group: 'Job Order',
       separator: false,
       roles: ['customer'],
@@ -22,7 +44,7 @@ export class Menu {
         {
           icon: 'icons/heroicons/solid/document.svg',
           label: 'Job Orders',
-          route: '/download',
+          route: '/admin/job-orders',
         },
         {
           icon: 'icons/heroicons/outline/gift.svg',

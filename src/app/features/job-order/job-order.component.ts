@@ -7,21 +7,32 @@ import { ColumnInterface } from '../../shared/components/table/models/data-table
 import { Technician } from './models/api-response.interface';
 import { dummyTechnician } from '../../../../dummy';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { ButtonComponent } from '../../shared/components/buttons/button/button.component';
+import { LoadingComponent } from '../../shared/components/loading/loading.component';
 
 @Component({
   selector: 'app-job-order',
   standalone: true,
-  imports: [CommonModule, TableComponent, ReactiveFormsModule],
-  template: ` @if (data) {
-    <button>
-      
-      Create Request
-    </button>
-    <app-table [data$]="data" [columns]="tableColumns" [searchKey$]="searchKey$"></app-table>
+  imports: [CommonModule, TableComponent, ReactiveFormsModule, ButtonComponent, LoadingComponent],
+  template: ` @if (loading) {
+    <div class="h-[90vh] flex justify-center items-center">
+      <app-loading />
+    </div>
+  } @else {
+    <div class="flex">
+      <app-button actionText="Create Request" buttonStyle="primary" [icon]="addIcon"/>
+    </div>
+    <app-table
+      [data$]="data"
+      [columns]="tableColumns"
+      [searchKey$]="searchKey$"
+    ></app-table>
     }`,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class JobOrderComponent implements OnInit {
+  public addIcon = 'icons/heroicons/outline/folder-plus.svg';
+  public loading!: boolean;
   public data!: Observable<Technician[]>;
   searchKey = new FormControl();
   searchKey$ = this.searchKey.valueChanges;

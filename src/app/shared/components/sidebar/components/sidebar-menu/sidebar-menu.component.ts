@@ -116,8 +116,6 @@ import { AuthService } from '../../../../../core/auth/services/auth.service';
               </span>
             </div>
           </div>
-
-          <!-- Submenu items -->
         </li>
       </ul>
 

@@ -8,11 +8,6 @@ export class Menu {
       roles: ['customer'],
       items: [
         {
-          icon: 'icons/heroicons/outline/folder-plus.svg',
-          label: 'Request',
-          route: '/customer/request',
-        },
-        {
           icon: 'icons/heroicons/solid/document.svg',
           label: 'Transactions',
           route: '/customer/home',
@@ -26,7 +21,7 @@ export class Menu {
       items: [
         {
           icon: 'icons/heroicons/outline/download.svg',
-          label: 'Download',
+          label: '',
           route: '/download',
         },
         {

@@ -44,7 +44,7 @@ import { AuthService } from '../../../../auth/services/auth.service';
     ]),
   ],
   template: `
-    <div class="relative ml-3 ">
+    <div class="relative ml-3">
       <!-- Profile Button -->
       <button
         (click)="toggleMenu()"
@@ -63,7 +63,7 @@ import { AuthService } from '../../../../auth/services/auth.service';
       <!-- Dropdown -->
       <div
         [@openClose]="isOpen ? 'open' : 'closed'"
-        class="absolute right-0 z-20 mt-2 w-60 origin-top-right transform rounded-md bg-white text-gray-800 py-4 shadow-custom ring-1 ring-transparent ring-opacity-5 transition focus:outline-none"
+        class="absolute right-0 z-20 mt-2 w-60 origin-top-right transform rounded-md bg-white drop-shadow-lg text-gray-800 py-4 shadow-custom ring-1 ring-transparent ring-opacity-5 transition focus:outline-none"
       >
         <div class="flext-row flex items-center px-4 pb-4">
           <div class="w-10 shrink-0">

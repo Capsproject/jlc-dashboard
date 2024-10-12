@@ -21,6 +21,9 @@ import { FormvalidationService } from '../../../core/services/formvalidation.ser
     [type]="type"
     [autocomplete]="autocomplete"
     >
+    @if(formControl.invalid && (formControl.dirty || formControl.touched)) {
+    <div class="text-red-500 text-xs mt-1">{{ getErrorMessage() }}</div>
+    }
   </div>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

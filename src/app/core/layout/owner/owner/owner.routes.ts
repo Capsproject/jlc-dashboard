@@ -6,12 +6,20 @@ export const ownerRoutes: Routes = [
     loadComponent: () => import('../../../../features/user-management/user-management.component').then(m => m.UserManagementComponent),
   },
   {
+    path: 'users?accountType=technician',
+    loadComponent: () => import('../../../../features/user-management/user-management.component').then(m => m.UserManagementComponent),
+  },
+  {
     path: 'dashboard',
     loadComponent: () => import('../../../../features/dashboard/analytics/analytics.component').then(m => m.AnalyticsComponent),
   },
   {
+    path: 'calendar',
+    loadComponent: () => import('../../../../features/calendar/calendar.component').then(m => m.CalendarPage),
+  },
+  {
     path: '',
-    redirectTo: 'user-management',
+    redirectTo: 'calendar',
     pathMatch: 'full',
   }
 ]

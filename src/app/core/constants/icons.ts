@@ -1,7 +1,7 @@
 import { LabelValuePair } from '../../shared/models/label-value-pair';
 
 export const icons: LabelValuePair[] = [
-  { label: 'plus-circle', value: 'icons/heroicons/outline/plus-circle.svg' },
+  { label: 'plus', value: 'icons/heroicons/outline/plus-circle.svg' },
   { label: 'minus', value: 'icons/heroicons/outline/minus.svg' },
   { label: 'calendar', value: 'icons/heroicons/outline/calendar.svg' },
   { label: 'cog', value: 'icons/heroicons/outline/cog.svg' },

@@ -1,0 +1,5 @@
+/* Make FullCalendar fill its container */
+.fc {
+  height: 100% !important;
+  width: 100% !important;
+}

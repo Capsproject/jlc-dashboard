@@ -10,7 +10,7 @@ export class Menu {
         {
           icon: 'icons/heroicons/outline/calendar.svg',
           label: 'Show Calendar',
-          route: '/owner/home',
+          route: '/owner/calendar',
         },
         {
           icon: 'icons/heroicons/outline/cog.svg',

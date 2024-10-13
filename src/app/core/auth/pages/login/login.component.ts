@@ -103,7 +103,16 @@ export class LoginComponent implements OnInit {
             setTimeout(() => {
               if (this.authenticationService.user()?.user_role.name === 'admin') {
                 this.router.navigate(['admin/']);
-              } else {
+              } else if (this.authenticationService.user()?.user_role.name === 'owner') {
+                this.router.navigate(['owner/']);
+              } else if (this.authenticationService.user()?.user_role.name === 'customer') {
+                this.router.navigate(['customer/']);
+              } else if (this.authenticationService.user()?.user_role.name === 'manager') {
+                this.router.navigate(['manager/']);
+              } else if (this.authenticationService.user()?.user_role.name === 'technician') {
+                this.router.navigate(['technician/']);
+              }
+              else {
                 this.router.navigate(['home/']);
               }
             }, 2000);

@@ -19,4 +19,8 @@ export class UserService {
   public createUser(data: Credential) {
     return this.http.post<ApiResponse>(this.url + 'admin/accounts', data, {observe: 'response'});
   }
+
+  public deleteUser(id: number) {
+    return this.http.delete<ApiResponse>(this.url + 'admin/accounts/' + id, {observe: 'response'});
+  }
 }

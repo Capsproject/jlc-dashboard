@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, OutputEmitterRef } from '@angular/core';
 import { AngularSvgIconModule } from 'angular-svg-icon';
 import {
   BehaviorSubject,
@@ -39,7 +39,7 @@ import { Users } from '../../../features/user-management/models/api-response';
           @for(instance of pageData; track instance.id; let i = $index){
           <tr>
             @for(column of columns; track $index){
-            <td>
+            <td (click)="emitData(instance)">
               @switch(column.tableBodyType){ @case ("text") {
               {{ instance[column.key] }}
               } @case("menu") {
@@ -104,7 +104,7 @@ export class TableComponent {
   @Input() searchKey$!: Observable<string>;
   @Input() columns: ColumnInterface<any>[] = [];
   @Input() data$!: Observable<any[] | Users[]>;
-
+  @Output() data = new EventEmitter<any>(undefined);
   //** Properties */
   pageData$!: Observable<any[]>;
   currentPage$: BehaviorSubject<number> = new BehaviorSubject(1);
@@ -185,5 +185,9 @@ export class TableComponent {
 
   prevPage() {
     this.currentPage$.next(this.currentPage$.value - 1);
+  }
+
+  public emitData(data: object) {
+    this.data.emit(data);
   }
 }

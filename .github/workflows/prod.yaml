@@ -25,14 +25,14 @@ jobs:
         run: npm run build:prod # The build command of your project
       - name: Add .htaccess
         run: |
-          echo "RewriteEngine On" >> dist/bangis/.htaccess
+          echo "RewriteEngine On" >> dist/jlc-client/browser/.htaccess
           echo "# If an existing asset or directory is requested go to it as it is" >> dist/bangis/.htaccess
           echo "RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -f [OR]" >> dist/bangis/.htaccess
           echo "RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -d" >> dist/bangis/.htaccess
-          echo "RewriteRule ^ - [L]" >> dist/bangis/.htaccess
-          echo "" >> dist/bangis/.htaccess
+          echo "RewriteRule ^ - [L]" >> dist/jlc-client/browser/.htaccess
+          echo "" >> dist/jlc-client/browser/.htaccess
           echo "# If the requested resource doesn't exist, use index.html" >> dist/bangis/.htaccess
-          echo "RewriteRule ^ /index.html" >> dist/bangis/.htaccess
+          echo "RewriteRule ^ /index.html" >> dist/jlc-client/browser/.htaccess
 
       - name: Push
         uses: s0/git-publish-subdir-action@develop

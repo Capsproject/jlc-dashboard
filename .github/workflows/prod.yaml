@@ -31,7 +31,7 @@ jobs:
           echo "RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -d" >> dist/jlc-client/browser/.htaccess
           echo "RewriteRule ^ - [L]" >> dist/jlc-client/browser/.htaccess
           echo "" >> dist/jlc-client/browser/.htaccess
-          echo "# If the requested resource doesn't exist, use index.html" >> dist/bangis/.htaccess
+          echo "# If the requested resource doesn't exist, use index.html" >> dist/jlc-client/browser/.htaccess
           echo "RewriteRule ^ /index.html" >> dist/jlc-client/browser/.htaccess
 
       - name: Push

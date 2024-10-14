@@ -3,7 +3,7 @@ name: Generate a build and push to another branch
 on:
   push:
     branches:
-      - main # The branch name your are commit the new changes
+      - main # The branch name you're committing the new changes to
 
 jobs:
   build:
@@ -23,6 +23,7 @@ jobs:
 
       - name: Build
         run: npm run build:prod # The build command of your project
+
       - name: Add .htaccess
         run: |
           echo "RewriteEngine On" >> dist/jlc-client/browser/.htaccess
@@ -33,8 +34,22 @@ jobs:
           echo "" >> dist/jlc-client/browser/.htaccess
           echo "# If the requested resource doesn't exist, use index.html" >> dist/jlc-client/browser/.htaccess
           echo "RewriteRule ^ /index.html" >> dist/jlc-client/browser/.htaccess
+# Added this for Z.com or cpanel ci/cd
+      - name: Add .cpanel.yml
+        run: |
+          echo "---" > dist/jlc-client/browser/.cpanel.yml
+          echo "deployment:" >> dist/jlc-client/browser/.cpanel.yml
+          echo "  tasks:" >> dist/jlc-client/browser/.cpanel.yml
+          echo "    - export DEPLOYPATH=/home/nowdorka/public_html/" >> dist/jlc-client/browser/.cpanel.yml
+          echo "    - /bin/cp -R .vscode \$DEPLOYPATH" >> dist/jlc-client/browser/.cpanel.yml
+          echo "    - /bin/cp -R assets \$DEPLOYPATH" >> dist/jlc-client/browser/.cpanel.yml
+          echo "    - /bin/cp -R css \$DEPLOYPATH" >> dist/jlc-client/browser/.cpanel.yml
+          echo "    - /bin/cp -R fonts \$DEPLOYPATH" >> dist/jlc-client/browser/.cpanel.yml
+          echo "    - /bin/cp -R img \$DEPLOYPATH" >> dist/jlc-client/browser/.cpanel.yml
+          echo "    - /bin/cp -R js \$DEPLOYPATH" >> dist/jlc-client/browser/.cpanel.yml
+          echo "    - /bin/cp index.html \$DEPLOYPATH" >> dist/jlc-client/browser/.cpanel.yml
 
-      - name: Push
+      - name: Push to prod branch
         uses: s0/git-publish-subdir-action@develop
         env:
           REPO: self

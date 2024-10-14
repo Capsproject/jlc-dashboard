@@ -1,0 +1,44 @@
+name: Generate a build and push to another branch
+
+on:
+  push:
+    branches:
+      - main # The branch name your are commit the new changes
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Build and Push
+    steps:
+      - name: git-checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20.10'
+
+      - name: Install all dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build:prod # The build command of your project
+      - name: Add .htaccess
+        run: |
+          echo "RewriteEngine On" >> dist/bangis/.htaccess
+          echo "# If an existing asset or directory is requested go to it as it is" >> dist/bangis/.htaccess
+          echo "RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -f [OR]" >> dist/bangis/.htaccess
+          echo "RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -d" >> dist/bangis/.htaccess
+          echo "RewriteRule ^ - [L]" >> dist/bangis/.htaccess
+          echo "" >> dist/bangis/.htaccess
+          echo "# If the requested resource doesn't exist, use index.html" >> dist/bangis/.htaccess
+          echo "RewriteRule ^ /index.html" >> dist/bangis/.htaccess
+
+      - name: Push
+        uses: s0/git-publish-subdir-action@develop
+        env:
+          REPO: self
+          BRANCH: prod # The branch name where you want to push the assets
+          FOLDER: dist/jlc-client/browser # The directory where your assets are generated
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # GitHub will automatically add this - you don't need to bother getting a token
+          MESSAGE: "Build: ({sha}) {msg}" # The commit message

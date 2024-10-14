@@ -106,15 +106,6 @@ import { AuthService } from '../../../../../core/auth/services/auth.service';
               >
               </svg-icon>
             </button>
-
-            <!-- Tooltip -->
-            <div class="fixed w-full" *ngIf="!menuService.showSideBar">
-              <span
-                class="z-1 absolute left-14 -top-[34px] w-auto min-w-max origin-left scale-0 rounded-md bg-foreground p-2 text-xs font-bold text-background shadow-md transition-all duration-200 group-hover:scale-100"
-              >
-                {{ item.label }}
-              </span>
-            </div>
           </div>
         </li>
       </ul>

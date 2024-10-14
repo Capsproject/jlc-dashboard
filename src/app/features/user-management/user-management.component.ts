@@ -32,6 +32,7 @@ import { Roles } from '../../shared/models/roles.model';
 import { SelectFieldComponent } from '../../shared/components/form-field/select-field/select-field.component';
 import { SelectField } from '../../shared/models/select-field.model';
 import { AlertService } from '../../shared/services/alert.service';
+import { SkillService } from './services/skill.service';
 
 @Component({
   selector: 'app-user-management',
@@ -65,7 +66,12 @@ import { AlertService } from '../../shared/services/alert.service';
             }
           </div>
           @if (isViewUser) {
-          <app-button actionText="Delete" buttonStyle="danger" loadingText="Deleting..."  (action)="deleteUser(+this.createUserForm.get('id')?.value)" />
+          <app-button
+            actionText="Delete"
+            buttonStyle="danger"
+            loadingText="Deleting..."
+            (action)="deleteUser(+this.createUserForm.get('id')?.value)"
+          />
           }
         </div>
 
@@ -111,13 +117,55 @@ import { AlertService } from '../../shared/services/alert.service';
       </div>
     </dialog>
 
-    <div class="flex justify-start">
+    <dialog #skillsDialog class="rounded-lg w-3/12">
+      <div class="flex flex-col h-auto p-4 rounded-lg">
+        <div
+          class="flex flex-row"
+          [ngClass]="isViewUser ? 'justify-between' : 'justify-center'"
+        >
+          <div class="flex flex-row w-full">
+            <h1 class="text-2xl">Add Skill</h1>
+          </div>
+        </div>
+
+        <app-form-field
+          [label]="'Skill'"
+          controlName="name"
+          [formGroup]="createUserForm"
+        />
+        <div class="button flex w-full justify-end gap-2">
+          <app-button
+            [actionText]="'Save'"
+            [buttonStyle]="'primary'"
+            loadingText="Saving..."
+            (action)="createUser()"
+            [loading]="loadingButton()"
+            [disabled]="!createUserForm.valid || loadingButton()"
+          />
+          <app-button
+            [actionText]="'Cancel'"
+            [buttonStyle]="'danger'"
+            (action)="skillsDialog.close()"
+          />
+        </div>
+      </div>
+    </dialog>
+
+    <div class="flex justify-start gap-1">
       <app-button
         [actionText]="isTechnicianList ? 'Add Technician' : 'Add User'"
         [buttonStyle]="'primary'"
         [icon]="utilityS.getIcon('plus')"
         (action)="userDialog.showModal()"
       />
+      @if (isTechnicianList) {
+      <app-button
+        actionText="Add Skill"
+        [buttonStyle]="'primary'"
+        [icon]="utilityS.getIcon('plus')"
+        (action)="skillsDialog.showModal()"
+      />
+      }
     </div>
     <app-table
       [data$]="data"
@@ -129,7 +177,7 @@ import { AlertService } from '../../shared/services/alert.service';
 })
 export class UserManagementComponent implements OnInit, OnDestroy {
   @ViewChild('userDialog') modal!: ElementRef;
-
+  @ViewChild('skillsDialog') skillmodal!: ElementRef;
   public data!: Observable<Users[]>;
   public isTechnicianList = false;
   public searchKey = new FormControl();
@@ -177,14 +225,15 @@ export class UserManagementComponent implements OnInit, OnDestroy {
   public loadingButton = signal(false);
   public loadingDeleteButton = signal(false);
 
-
   public createUserForm!: FormGroup;
+  public skillsForm!: FormGroup;
   private userSubscription: Subscription = new Subscription();
   private readonly userServices = inject(UserService);
   private readonly route = inject(ActivatedRoute);
   private readonly fb = inject(FormBuilder);
   private readonly userRoles = inject(RolesService);
   private readonly alert = inject(AlertService);
+  private readonly skillService = inject(SkillService);
 
   public readonly utilityS = inject(UtilitiesService);
   public rolesOption: SelectField[] = [];
@@ -192,10 +241,11 @@ export class UserManagementComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.fetchUsers();
     this.getRoles();
-    this.initializeForm();
+    this.initializeUserForm();
+    this.initializeSkillsForm();
   }
 
-  private initializeForm() {
+  private initializeUserForm() {
     let userRole: string | undefined;
     if (this.isTechnicianList) {
       userRole = '4';
@@ -208,6 +258,12 @@ export class UserManagementComponent implements OnInit, OnDestroy {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]],
       user_role_id: [userRole as string, [Validators.required]],
+    });
+  }
+
+  private initializeSkillsForm() {
+    this.skillsForm = this.fb.group({
+      skill: ['', [Validators.required]],
     });
   }
 
@@ -275,27 +331,72 @@ export class UserManagementComponent implements OnInit, OnDestroy {
       this.loadingButton.set(true);
       this.createUserForm.removeControl('id');
       this.userSubscription.add(
-
-        this.userServices.createUser(this.createUserForm.value).pipe(
-          catchError((err : HttpErrorResponse) => {
-            if (err.status === 500) this.alert.handleError('Something went wrong');
-            if (err.status === 422) this.alert.handleError(err.error.message);
-            return of(err);
+        this.userServices
+          .createUser(this.createUserForm.value)
+          .pipe(
+            catchError((err: HttpErrorResponse) => {
+              if (err.status === 500)
+                this.alert.handleError('Something went wrong');
+              if (err.status === 422) this.alert.handleError(err.error.message);
+              return of(err);
+            })
+          )
+          .subscribe({
+            next: () => {
+              this.fetchUsers();
+              this.createUserForm.reset();
+            },
+            complete: () => {
+              this.loadingButton.set(false);
+              this.createUserForm.reset();
+              this.fetchUsers();
+              this.closeDialog();
+            },
           })
-        ).subscribe({
-          next: () => {
-            this.fetchUsers();
-            this.createUserForm.reset();
-          },
-          complete: () => {
-            this.loadingButton.set(false);
-            this.createUserForm.reset();
-            this.fetchUsers();
-            this.closeDialog();
-          },
-        })
       );
     }
+  }
+
+  public createSkill() {
+      this.loadingButton.set(true);
+      this.createUserForm.removeControl('id');
+      this.userSubscription.add(
+        this.skillService
+          .createSkills(this.skillsForm.value)
+          .pipe(
+            catchError((err: HttpErrorResponse) => {
+              if (err.status === 500)
+                this.alert.handleError('Something went wrong');
+              if (err.status === 422) this.alert.handleError(err.error.message);
+              return of(err);
+            })
+          )
+          .subscribe({
+            next: () => {
+              this.createUserForm.reset();
+            },
+            complete: () => {
+              this.loadingButton.set(false);
+              this.createUserForm.reset();
+              this.fetchSkills();
+              this.closeSkillDialog();
+            },
+          })
+      );
+  }
+
+  private fetchSkills() {
+    this.skillService.getSkills().subscribe({
+      next: (res: HttpResponse<ApiResponse>) => {
+        this.data = of(
+          res.body?.data
+            .sort((a: { id: number }, b: { id: number }) => a.id - b.id)
+        );
+      },
+      complete: () => {
+        this.loadingFetchApi.set(false);
+      },
+    })
   }
 
   public viewUser(user: Users) {
@@ -323,6 +424,11 @@ export class UserManagementComponent implements OnInit, OnDestroy {
 
   public closeDialog() {
     this.modal.nativeElement.close();
+    this.isViewUser = false;
+  }
+
+  public closeSkillDialog() {
+    this.skillmodal.nativeElement.close();
     this.isViewUser = false;
   }
 

@@ -1,8 +1,7 @@
-import { CreateComputedOptions, inject, Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment.development';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { createUserModel } from '../models/create-user.model';
 import { ApiResponse } from '../../../shared/models/api-response';
 
 @Injectable({

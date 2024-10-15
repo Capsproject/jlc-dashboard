@@ -15,7 +15,7 @@ export class Menu {
         {
           icon: 'icons/heroicons/outline/cog.svg',
           label: 'Schedule Job Orders',
-          route: '/admin/job-orders',
+          route: '/owner/job-orders',
         },
         {
           icon: 'icons/heroicons/outline/list.svg',

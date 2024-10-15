@@ -21,7 +21,7 @@ import { CommonModule } from '@angular/common';
 import { UserService } from './services/user.service';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { ApiResponse } from '../../shared/models/api-response';
-import { UserRole, Users } from './models/api-response';
+import { Users } from './models/api-response';
 import { LoadingComponent } from '../../shared/components/loading/loading.component';
 import { ButtonComponent } from '../../shared/components/buttons/button/button.component';
 import { UtilitiesService } from '../../shared/utilities/utilities.service';

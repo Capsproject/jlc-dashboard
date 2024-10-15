@@ -18,6 +18,10 @@ export const ownerRoutes: Routes = [
     loadComponent: () => import('../../../../features/calendar/calendar.component').then(m => m.CalendarPage),
   },
   {
+    path: 'job-orders',
+    loadComponent: () => import('../../../../features/job-order/job-order.component').then(m => m.JobOrderComponent),
+  },
+  {
     path: '',
     redirectTo: 'calendar',
     pathMatch: 'full',

@@ -1,1 +1,0 @@
-import"./chunk-EQDQRRRY.js";var e=[{path:"login",loadComponent:()=>import("./chunk-JOPOYAGI.js").then(t=>t.LoginComponent),title:"Login - JLC Service Center"},{path:"register",loadComponent:()=>import("./chunk-DCCFS66I.js").then(t=>t.RegisterComponent),title:"Register - JLC Service Center"},{path:"",pathMatch:"full",redirectTo:"login"}];export{e as authRoutes};

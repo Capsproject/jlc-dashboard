@@ -1,4 +1,4 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { inject, Injectable, signal, ɵsetInjectorProfilerContext } from '@angular/core';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { UserModel } from '../models/user-model';
 import { HttpClient } from '@angular/common/http';
@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { environment } from '../../../../environments/environment.development';
 import { AlertService } from '../../../shared/services/alert.service';
 import { ApiResponseModel } from '../models/api-response-model';
+import { LoginService } from './login.service';
 
 @Injectable({
   providedIn: 'root',
@@ -23,6 +24,7 @@ export class AuthService {
   private readonly jwtService = inject(JwtService);
   private readonly router = inject(Router);
   private readonly _alertService = inject(AlertService);
+  private readonly loginS = inject(LoginService);
 
   isLoggedIn$ = this._isLoggedIn$.asObservable();
 
@@ -46,6 +48,7 @@ export class AuthService {
   }
 
   public logout(): void {
+    this.loginS.logout()
     this.purgeAuth();
     this.router.navigate(['/auth/login']);
   }

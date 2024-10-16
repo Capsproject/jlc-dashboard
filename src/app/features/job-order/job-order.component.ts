@@ -1,5 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  inject,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { TableComponent } from '../../shared/components/table/table.component';
 import { Observable } from 'rxjs';
 import { of } from 'rxjs';
@@ -9,30 +16,59 @@ import { dummyTechnician } from '../../../../dummy';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ButtonComponent } from '../../shared/components/buttons/button/button.component';
 import { LoadingComponent } from '../../shared/components/loading/loading.component';
+import { AuthService } from '../../core/auth/services/auth.service';
+import { CreateJobComponent } from './components/create-job/create-job.component';
+import { CustomerCreateJobComponent } from './components/customer-create-job/customer-create-job.component';
 
 @Component({
   selector: 'app-job-order',
   standalone: true,
-  imports: [CommonModule, TableComponent, ReactiveFormsModule, ButtonComponent, LoadingComponent],
+  imports: [
+    CommonModule,
+    TableComponent,
+    ReactiveFormsModule,
+    ButtonComponent,
+    LoadingComponent,
+    CreateJobComponent,
+    CustomerCreateJobComponent,
+  ],
   template: ` @if (loading) {
     <div class="h-[90vh] flex justify-center items-center">
       <app-loading />
     </div>
-  } @else {
+    } @else {
     <div class="flex">
-      <app-button actionText="Create Request" buttonStyle="primary" [icon]="addIcon"/>
+      <app-button
+        actionText="Create Request"
+        buttonStyle="primary"
+        [icon]="addIcon"
+        (action)="this.openDialog()"
+      />
     </div>
     <app-table
       [data$]="data"
       [columns]="tableColumns"
       [searchKey$]="searchKey$"
-    ></app-table>
+    />
+    <dialog #jobCreateDialog class="w-1/2">
+      @if (accountType !== 'customer') {
+      <jlc-create-job (close)="jobCreateDialog.close()" />
+      } @else {
+      <jlc-customer-create-job />
+      }
+    </dialog>
     }`,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class JobOrderComponent implements OnInit {
+  @ViewChild('jobCreateDialog') jobCreateDialog!: ElementRef;
   public addIcon = 'icons/heroicons/outline/folder-plus.svg';
   public loading!: boolean;
+
+  private readonly auth = inject(AuthService);
+
+  public accountType = this.auth.userInfo.user_role.name;
+
   public data!: Observable<Technician[]>;
   searchKey = new FormControl();
   searchKey$ = this.searchKey.valueChanges;
@@ -76,5 +112,9 @@ export class JobOrderComponent implements OnInit {
 
   ngOnInit(): void {
     this.data = of(dummyTechnician);
+  }
+
+  public openDialog() {
+    this.jobCreateDialog.nativeElement.showModal();
   }
 }

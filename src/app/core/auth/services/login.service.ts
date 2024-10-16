@@ -13,4 +13,9 @@ export class LoginService {
     return this.http.post<object>(this.url + 'auth/login', data, {
       observe: 'response',
     })}
+  logout() {
+    return this.http.get(this.url + 'auth/logout', {
+      observe: 'response',
+    });
+  }
 }

@@ -124,7 +124,7 @@ import { SkillService } from './services/skill.service';
           [ngClass]="isViewUser ? 'justify-between' : 'justify-center'"
         >
           <div class="flex flex-row w-full">
-            <h1 class="text-2xl">Add Skill</h1>
+            <h1 class="text-2xl font-semibold">Add Skill</h1>
           </div>
         </div>
 

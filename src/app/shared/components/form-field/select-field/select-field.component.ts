@@ -54,7 +54,6 @@ export class SelectFieldComponent {
   @Input() placeholder = '';
   @Input() options!: SelectField[];
   @Input() labelClass: string[] = [];
-
   private readonly formValidationService = inject(FormvalidationService);
 
   public get formControl(): FormControl {

@@ -6,10 +6,14 @@ import {
   trigger,
 } from '@angular/animations';
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnInit,
+} from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AngularSvgIconModule } from 'angular-svg-icon';
-import { ClickOutsideDirective } from '../../../../../shared/directives/click-outside.directive';
 import { AuthService } from '../../../../auth/services/auth.service';
 
 @Component({
@@ -19,7 +23,6 @@ import { AuthService } from '../../../../auth/services/auth.service';
     CommonModule,
     RouterLink,
     AngularSvgIconModule,
-    ClickOutsideDirective,
   ],
   animations: [
     trigger('openClose', [
@@ -53,8 +56,6 @@ import { AuthService } from '../../../../auth/services/auth.service';
       >
         <span class="sr-only">Open user menu</span>
         <img
-          clickOutside
-          (clickOutside)="isOpen = false"
           class="h-9 w-9 rounded-md"
           src="https://avatars.githubusercontent.com/u/12519008?v=4"
           alt=""
@@ -76,11 +77,11 @@ import { AuthService } from '../../../../auth/services/auth.service';
           <div
             class="overflow-hidden px-2 text-sm font-semibold text-foreground"
           >
-            Luciano Oliveira
+            {{ auth.userInfo.name }}
             <p
               class="truncate text-ellipsis text-xs font-semibold text-muted-foreground"
             >
-              me&#64;lanno.dev
+              {{ auth.userInfo.email }}
             </p>
           </div>
         </div>
@@ -111,25 +112,24 @@ import { AuthService } from '../../../../auth/services/auth.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileMenuComponent implements OnInit {
-
   private readonly router = inject(Router);
-  private readonly auth  = inject(AuthService);
+  public readonly auth = inject(AuthService);
   public isOpen = false;
   public profileMenu = [
-    {
-      title: 'Your Profile',
-      icon: './icons/heroicons/outline/user-circle.svg',
-      click: 0
-    },
-    {
-      title: 'Settings',
-      icon: './icons/heroicons/outline/cog-6-tooth.svg',
-      click: 1
-    },
+    // {
+    //   title: 'Your Profile',
+    //   icon: './icons/heroicons/outline/user-circle.svg',
+    //   click: 0,
+    // },
+    // {
+    //   title: 'Settings',
+    //   icon: './icons/heroicons/outline/cog-6-tooth.svg',
+    //   click: 1,
+    // },
     {
       title: 'Log out',
       icon: './icons/heroicons/outline/logout.svg',
-      click: 2
+      click: 2,
     },
   ];
 
@@ -139,12 +139,12 @@ export class ProfileMenuComponent implements OnInit {
     this.isOpen = !this.isOpen;
   }
 
-  public handleClickMenu (i : number) {
+  public handleClickMenu(i: number) {
     if (i === 1) {
       this.router.navigate(['/settings']);
     } else if (i === 2) {
       this.auth.logout();
-    } else if  (i === 0) {
+    } else if (i === 0) {
       this.router.navigate(['/profile']);
     }
   }

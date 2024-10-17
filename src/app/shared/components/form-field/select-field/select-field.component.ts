@@ -4,6 +4,7 @@ import {
   Component,
   inject,
   Input,
+  OnInit,
 } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SelectField } from '../../../models/select-field.model';
@@ -52,9 +53,10 @@ export class SelectFieldComponent {
   @Input() controlName!: string;
   @Input() label?: string;
   @Input() placeholder = '';
-  @Input() options!: SelectField[];
+  @Input() options!: SelectField[] | undefined | null;
   @Input() labelClass: string[] = [];
   private readonly formValidationService = inject(FormvalidationService);
+
 
   public get formControl(): FormControl {
     return this.formGroup.get(this.controlName) as FormControl;

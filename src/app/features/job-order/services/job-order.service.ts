@@ -12,7 +12,7 @@ export class JobOrderService {
   private readonly http = inject(HttpClient);
 
   public createJobOrder(data: FormData) {
-    return this.http.post(`${this.url}/job-order`, data);
+    return this.http.post(`${this.url}/job-order`, data, {observe: 'response'});
   }
 
 }

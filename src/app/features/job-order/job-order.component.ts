@@ -18,7 +18,7 @@ import { ButtonComponent } from '../../shared/components/buttons/button/button.c
 import { LoadingComponent } from '../../shared/components/loading/loading.component';
 import { AuthService } from '../../core/auth/services/auth.service';
 import { CreateJobComponent } from './components/create-job/create-job.component';
-import { CustomerCreateJobComponent } from './components/customer-create-job/customer-create-job.component';
+import { ViewJobOrderComponent } from './components/job-order/job-order.component';
 
 @Component({
   selector: 'app-job-order',
@@ -30,7 +30,7 @@ import { CustomerCreateJobComponent } from './components/customer-create-job/cus
     ButtonComponent,
     LoadingComponent,
     CreateJobComponent,
-    CustomerCreateJobComponent,
+    ViewJobOrderComponent,
   ],
   template: ` @if (loading) {
     <div class="h-[90vh] flex justify-center items-center">
@@ -49,19 +49,22 @@ import { CustomerCreateJobComponent } from './components/customer-create-job/cus
       [data$]="data"
       [columns]="tableColumns"
       [searchKey$]="searchKey$"
+      (data)="this.openViewDialog()"
     />
-    <dialog #jobCreateDialog class="w-1/2">
+    <dialog #jobCreateDialog class="w-1/2 rounded-lg">
       @if (accountType !== 'customer') {
       <jlc-create-job (close)="jobCreateDialog.close()" />
-      } @else {
-      <jlc-customer-create-job />
       }
+    </dialog>
+    <dialog #viewJobOrder class="w-1/2 rounded-lg">
+      <jlc-view-job-order (close)="viewJobOrder.close()"/>
     </dialog>
     }`,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class JobOrderComponent implements OnInit {
   @ViewChild('jobCreateDialog') jobCreateDialog!: ElementRef;
+  @ViewChild('viewJobOrder') viewJobOrder!: ElementRef;
   public addIcon = 'icons/heroicons/outline/folder-plus.svg';
   public loading!: boolean;
 
@@ -117,4 +120,10 @@ export class JobOrderComponent implements OnInit {
   public openDialog() {
     this.jobCreateDialog.nativeElement.showModal();
   }
+
+  public openViewDialog() {
+    this.viewJobOrder.nativeElement.showModal();
+  }
+
+
 }

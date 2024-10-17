@@ -35,7 +35,7 @@ import { AngularSvgIconModule } from 'angular-svg-icon';
   </button>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ButtonComponent implements OnInit {
+export class ButtonComponent {
   @Input() actionText!: string;
   @Input() icon?: string;
   @Input() type!: 'button' | 'submit' | 'reset';
@@ -45,9 +45,6 @@ export class ButtonComponent implements OnInit {
   @Input() loadingText?: string;
   @Output() action = new EventEmitter<void>();
 
-  ngOnInit(): void {
-    console.log(this.icon);
-  }
   public onClick(): void {
     this.action.emit();
   }

@@ -2,14 +2,21 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  effect,
   EventEmitter,
   inject,
   Input,
   OnInit,
   Output,
+  Signal,
   signal,
 } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { FormFieldComponent } from '../../../../shared/components/form-field/form-field.component';
 import { SelectFieldComponent } from '../../../../shared/components/form-field/select-field/select-field.component';
 import { warranty_options } from '../../../../core/constants/warrant';
@@ -22,6 +29,9 @@ import { LabelValuePair } from '../../../../shared/models/label-value-pair';
 import { AuthService } from '../../../../core/auth/services/auth.service';
 import { UserService } from '../../../user-management/services/user.service';
 import { Users } from '../../../user-management/models/api-response';
+import { Observable } from 'rxjs';
+import { locations } from '../../../../core/constants/locations';
+import { AlertService } from '../../../../shared/services/alert.service';
 
 @Component({
   selector: 'jlc-create-job',
@@ -36,16 +46,17 @@ import { Users } from '../../../user-management/models/api-response';
   ],
   template: ` <div class="flex p-4 w-full gap-2 flex-col">
     <div class="flex gap-2">
+      @if(steps === 1) { @if(accountType !== 'customer') {
+      <jlc-select-field
+        [formGroup]="createJobReq"
+        controlName="customer_id"
+        label="Customer"
+        placeholder="Select Customer"
+        [options]="userS.customers()"
+      />
+      <!-- Todo Upon Selection Patch The Value of the Profile -->
+      } } @if(steps === 2) {
       <div class="w-1/2 flex flex-col">
-        <!-- @if(accountType !== 'customer') {
-        <jlc-select-field
-          [formGroup]="createJobReq"
-          controlName="customer_id"
-          label="Customer"
-          placeholder="Select Customer"
-          [options]="customers()"
-        />
-        } -->
         <app-form-field
           [formGroup]="createJobReq"
           controlName="name"
@@ -54,13 +65,12 @@ import { Users } from '../../../user-management/models/api-response';
           type="text"
           autocomplete="name"
         />
-        <app-form-field
+        <jlc-select-field
           [formGroup]="createJobReq"
           controlName="address"
           label="Address"
-          placeholder="Enter Address"
-          type="text"
-          autocomplete="address"
+          placeholder="Select Address"
+          [options]="locations"
         />
         <app-form-field
           [formGroup]="createJobReq"
@@ -129,14 +139,21 @@ import { Users } from '../../../user-management/models/api-response';
 
         <jlc-image-upload (selectedFile)="onFileSelected($event)" />
       </div>
+      }
     </div>
     <div class="flex justify-end gap-2">
+      @if(steps === 1) {
+      <app-button actionText="Next" class="primary" (action)="next()" />
+      } @if(steps === 2) {
+      <app-button actionText="Back" class="primary" (action)="(prev())" />
       <app-button
         actionText="Create"
         loadingText="Creating..."
         class="primary"
         (action)="onSubmit()"
+        [disabled]="!createJobReq.valid"
       />
+      }
       <app-button
         actionText="Cancel"
         [buttonStyle]="'danger'"
@@ -155,40 +172,54 @@ export class CreateJobComponent implements OnInit {
   brandOptions = brandOptions;
   serviceType = serviceType;
   selectedFile!: File;
-  customers = signal<LabelValuePair[]>([]);
+  customers?: LabelValuePair[];
   accountType!: string;
+  steps = 1;
+  locations: LabelValuePair[] = locations;
+
+  constructor() {
+    this.accountType = this.auth.userInfo.user_role.name;
+    if (this.accountType !== 'customer') {
+      this.steps = 1;
+      this.userS.getAllCustomers();
+    } else {
+      this.steps = 2;
+      // Get and Patch The customer Info Here
+    }
+    effect(() => {
+      this.customers = this.userS.customers();
+    });
+  }
+
+  public loading = true;
 
   private readonly fb = inject(FormBuilder);
   private readonly jobOrderService = inject(JobOrderService);
   private readonly auth = inject(AuthService);
-  private readonly userS = inject(UserService);
+  public readonly userS = inject(UserService);
+  private readonly Alert = inject(AlertService);
 
   ngOnInit() {
     this.initiateForm();
-    this.accountType = this.auth.userInfo.user_role.name;
-    if(this.accountType !== 'customer') {
-      this.userS.getAllUsers().subscribe((res)=> {
-        const customers = res.body.data.filter((user : Users) => user.user_role.name === 'customer');
-        customers.map((customer: Users) => {
-          customers.map((customer: Users) => {
-            return {
-              label: customer.name,
-              value: customer.id
-            }
-          })
-        })
-        this.customers.set(customers);
-        console.log(this.customers.length);
-      })
-    }
   }
 
+  next() {
+    if (this.createJobReq.controls['customer_id'].value === '') {
+      this.createJobReq.controls['customer_id'].setErrors({ required: true });
+    } else {
+      this.steps++;
+      console.log(this.steps);
+    }
+  }
+  prev() {
+    this.steps--;
+  }
   initiateForm() {
     this.createJobReq = this.fb.group({
       name: [''],
-      address: [''],
-      email: [''],
-      mobile_number: [''],
+      address: ['', Validators.required],
+      email: ['', Validators.email],
+      mobile_number: ['', Validators.required, Validators.pattern('^[0-9]*$')],
       date_purchased: ['', Validators.required],
       warranty_status: ['', Validators.required],
       trouble_reported: [''],
@@ -196,14 +227,20 @@ export class CreateJobComponent implements OnInit {
       brand_name: ['', Validators.required],
       service_type: ['', Validators.required],
       upload_proof: [''],
+      customer_id: [''],
     });
   }
+
 
   onFileSelected(file: File) {
     this.selectedFile = file;
   }
 
   onSubmit() {
+    if(this.createJobReq.invalid) {
+      this.createJobReq.markAllAsTouched();
+      return;
+    }
     const formData = new FormData();
     // Append form fields to FormData
     Object.keys(this.createJobReq.controls).forEach((key) => {
@@ -216,9 +253,17 @@ export class CreateJobComponent implements OnInit {
       console.log(formData);
     });
 
-    this.jobOrderService.createJobOrder(formData).subscribe((res) => {
-      console.log('Job Order Created', res);
-    });
+    this.jobOrderService.createJobOrder(formData).subscribe(
+      {
+        next: (res) => {
+          this.closeModal();
+          this.Alert.handleSuccess('Job Order Created Successfully');
+        },
+        error: (err: Error) => {
+          this.Alert.handleError(err.message);
+        }
+      }
+    )
   }
 
   closeModal() {

@@ -11,7 +11,6 @@ export class UtilitiesService {
   getIcon(iconName: string): string {
     console.log(iconName);
     const iconSource = this.icons.find(icon => icon.label === iconName)?.value || 'wala';
-    console.log(iconSource);
     return iconSource
   }
 

@@ -33,8 +33,12 @@ import { UtilitiesService } from '../../utilities/utilities.service';
       class="block text-xxs font-medium text-gray-600 mb-1"
       >{{ label }}</label
     >
-    }
-
+    } @if (isTextArea) {
+    <textarea
+      class="resize rounded-md block w-full py-[10px] px-3 font-normal text-xs bg-white text-gray-600 outline-none border border-solid border-gray-300 focus:border-gray-500 focus-visible:border-gray-500 hover:border-gray-500 "
+      [formControlName]="controlName"
+    ></textarea>
+    } @else {
     <div class="relative h-10">
       <input
         class="block w-full rounded-lg py-[10px] px-3 font-normal text-xs bg-white disabled:text-gray-300 disabled:bg-opacity-60 text-gray-600 outline-none border border-solid border-gray-300 focus:border-gray-500 focus-visible:border-gray-500 hover:border-gray-500 disabled:border-gray-300"
@@ -51,7 +55,11 @@ import { UtilitiesService } from '../../utilities/utilities.service';
       />
 
       @if (type === 'password') {
-      <button type="button" (click)="showPassword = !showPassword" class="absolute right-3 top-2 text-gray-400">
+      <button
+        type="button"
+        (click)="showPassword = !showPassword"
+        class="absolute right-3 top-2 text-gray-400"
+      >
         <svg-icon
           [src]="
             showPassword
@@ -71,8 +79,7 @@ import { UtilitiesService } from '../../utilities/utilities.service';
       </button>
       }
     </div>
-
-    @if (formControl.invalid && (formControl.dirty || formControl.touched)) {
+    } @if (formControl.invalid && (formControl.dirty || formControl.touched)) {
     <div class="block w-full text-red-500 mt-1 text-xxs font-normal">
       {{ getErrorMessage() }}
     </div>

@@ -102,11 +102,13 @@ import { UserService } from '../../../user-management/services/user.service';
         for="tab-four"
         class="bg-slate-300 hover:bg-slate-200 peer-checked/tab-four:bg-green-200 cursor-default p-4 rounded-t-lg block"
       >
-        Four
+        Technician
       </label>
 
       <div class="bg-green-200 hidden peer-checked/tab-one:block p-4 w-full">
-        <div class="flex w-full gap-2 lg:flex-nowrap md:flex-nowrap sm:flex-wrap">
+        <div
+          class="flex w-full gap-2 lg:flex-nowrap md:flex-nowrap sm:flex-wrap"
+        >
           <div class="lg:w-1/2 sm:w-full md:w-1/2 flex flex-col">
             <app-form-field
               [formGroup]="createJobReq"
@@ -373,11 +375,24 @@ import { UserService } from '../../../user-management/services/user.service';
         </div>
       </div>
       <div class="bg-green-200 hidden peer-checked/tab-four:block p-4 w-full">
-        <jlc-select-field [formGroup]="createJobReq"
-        controlName="customer_id"
-        label="Customer"
-        placeholder="Select Customer"
-        [options]="userS.technicians()" />
+        <div class="flex flex-col">
+          <jlc-select-field
+            [formGroup]="createJobReq"
+            controlName="customer_id"
+            label="Customer"
+            placeholder="Select Customer"
+            [options]="userS.technicians()"
+          />
+          <app-form-field
+            [formGroup]="techInfo"
+            controlName="memo"
+            label="Memo"
+            placeholder="Enter Memo"
+            type="text"
+            autocomplete="memo"
+            [isTextArea]="true"
+          />
+        </div>
       </div>
     </section>
   `,
@@ -406,7 +421,7 @@ export class ViewJobOrderComponent implements OnInit {
     this.userS.getAllTechnicians();
     effect(() => {
       this.customers = this.userS.customers();
-    })
+    });
   }
 
   ngOnInit(): void {
@@ -448,6 +463,7 @@ export class ViewJobOrderComponent implements OnInit {
       rightView: [''],
       billsProduct: this.fb.array([]),
       grandTotal: [''],
+      memo: [''],
     });
   }
 

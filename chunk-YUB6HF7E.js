@@ -1,1 +1,0 @@
-import"./chunk-EQDQRRRY.js";var o=[{path:"home",loadComponent:()=>import("./chunk-CGV5OQKA.js").then(e=>e.JobOrderComponent),title:"Home - Customer",data:{breadcrumbs:"Home",role:["customer"]}},{path:"",pathMatch:"full",redirectTo:"home"}];export{o as customerRoutees};

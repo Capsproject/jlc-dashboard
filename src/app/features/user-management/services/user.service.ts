@@ -45,6 +45,7 @@ export class UserService {
             value: user.id.toString(),
           }
         })
+        console.log(customers);
         this.technicians.set(customers);
       });
   }

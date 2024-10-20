@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  effect,
   EventEmitter,
   inject,
   OnInit,
@@ -11,13 +12,20 @@ import { ButtonComponent } from '../../../../shared/components/buttons/button/bu
 import { UtilitiesService } from '../../../../shared/utilities/utilities.service';
 import { SelectFieldComponent } from '../../../../shared/components/form-field/select-field/select-field.component';
 import { warranty_options } from '../../../../core/constants/warrant';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  FormArray,
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { locations } from '../../../../core/constants/locations';
 import { LabelValuePair } from '../../../../shared/models/label-value-pair';
 import { serviceType } from '../../../../core/constants/servicetype';
 import { brandOptions } from '../../../../core/constants/brand';
 import { FormFieldComponent } from '../../../../shared/components/form-field/form-field.component';
 import { ImageUploadComponent } from '../../../../shared/components/file-upload/file-upload.component';
+import { UserService } from '../../../user-management/services/user.service';
 
 @Component({
   selector: 'jlc-view-job-order',
@@ -28,6 +36,7 @@ import { ImageUploadComponent } from '../../../../shared/components/file-upload/
     SelectFieldComponent,
     FormFieldComponent,
     ImageUploadComponent,
+    ReactiveFormsModule,
   ],
   template: `
     <div class="flex justify-between p-4">
@@ -81,7 +90,7 @@ import { ImageUploadComponent } from '../../../../shared/components/file-upload/
         for="tab-three"
         class="bg-slate-300 hover:bg-slate-200 peer-checked/tab-three:bg-green-200 cursor-default p-4 rounded-t-lg block"
       >
-        Three
+        Billing & Parts Replacement Details
       </label>
       <input
         id="tab-four"
@@ -97,8 +106,8 @@ import { ImageUploadComponent } from '../../../../shared/components/file-upload/
       </label>
 
       <div class="bg-green-200 hidden peer-checked/tab-one:block p-4 w-full">
-        <div class="flex w-full gap-2">
-          <div class="w-1/2 flex flex-col">
+        <div class="flex w-full gap-2 lg:flex-nowrap md:flex-nowrap sm:flex-wrap">
+          <div class="lg:w-1/2 sm:w-full md:w-1/2 flex flex-col">
             <app-form-field
               [formGroup]="createJobReq"
               controlName="name"
@@ -155,7 +164,7 @@ import { ImageUploadComponent } from '../../../../shared/components/file-upload/
               [isTextArea]="true"
             />
           </div>
-          <div class="w-1/2 flex flex-col">
+          <div class="lg:w-1/2 sm:w-full md:w-1/2 flex flex-col">
             <app-form-field
               [formGroup]="createJobReq"
               controlName="date_received"
@@ -183,8 +192,8 @@ import { ImageUploadComponent } from '../../../../shared/components/file-upload/
       </div>
       <!-- Tab 2 -->
       <div class="bg-green-200 hidden peer-checked/tab-two:block p-4 w-full">
-        <div class="flex w-full gap-2">
-          <div class="w-1/2 flex flex-col">
+        <div class="flex w-full gap-2 flex-wrap">
+          <div class="lg:w-1/2 sm:w-full flex flex-col">
             <app-form-field
               [formGroup]="techInfo"
               controlName="accessories"
@@ -202,7 +211,7 @@ import { ImageUploadComponent } from '../../../../shared/components/file-upload/
               autocomplete="trouble_reported"
             />
           </div>
-          <div class="w-1/2 flex flex-col">
+          <div class="lg:w-1/2 sm:w-full flex flex-col flex-wrap">
             <app-form-field
               [formGroup]="techInfo"
               controlName="troublesFound"
@@ -214,14 +223,14 @@ import { ImageUploadComponent } from '../../../../shared/components/file-upload/
             />
           </div>
         </div>
-        <div class="flex">
+        <div class="flex flex-wrap">
           <p class="font-medium text-base">
             Physical Condition (Specify any particular scratches, marks, or
             damages)
           </p>
         </div>
-        <div class="flex w-full gap-2">
-          <div class="w-1/2 flex flex-col">
+        <div class="flex w-full gap-2 flex-wrap">
+          <div class="lg:w-1/2 sm:w-full flex flex-col flex-wrap">
             <app-form-field
               [formGroup]="techInfo"
               controlName="frontView"
@@ -247,7 +256,7 @@ import { ImageUploadComponent } from '../../../../shared/components/file-upload/
               autocomplete="backView"
             />
           </div>
-          <div class="w-1/2 flex flex-col">
+          <div class="lg:w-1/2 sm:w-full flex flex-col flex-wrap">
             <app-form-field
               [formGroup]="techInfo"
               controlName="bottomView"
@@ -278,14 +287,100 @@ import { ImageUploadComponent } from '../../../../shared/components/file-upload/
 
       <!-- Tab 3 -->
       <div class="bg-green-200 hidden peer-checked/tab-three:block p-4 w-full">
-        Third tab pane
+        <app-button
+          (action)="addBillProduct()"
+          buttonStyle="primary"
+          actionText="Add Product"
+          [icon]="iconS.getIcon('plus')"
+        ></app-button>
+        <!-- <button (click)="addProduct()" class="bg-green-500 text-white px-4 py-2 rounded-lg">Add Product</button> -->
+        <div [formGroup]="techInfo" class="mt-2">
+          <ng-container formArrayName="billsProduct">
+            <ng-container
+              *ngFor="let billForm of billsProduct.controls; let index = index"
+              [formGroupName]="index"
+            >
+              <div class="flex gap-1 mt-1 flex-wrap">
+                <div class="w-2/6">
+                  <input
+                    class="block w-full rounded-lg py-[10px] px-3 font-normal text-xs bg-white disabled:text-gray-300 disabled:bg-opacity-60 text-gray-600 outline-none border border-solid border-gray-300 focus:border-gray-500 focus-visible:border-gray-500 hover:border-gray-500 disabled:border-gray-300"
+                    formControlName="productName"
+                    id="productName"
+                    placeholder="Enter Product Name"
+                    autocomplete="productName"
+                    [ngClass]="{
+                      '!border-red-500':
+                        billsProduct.get('productName')?.value.invalid &&
+                        (billsProduct.get('productName')?.value?.dirty ||
+                          billsProduct.get('productName')?.value.touched)
+                    }"
+                  />
+                </div>
+                <div class="w-2/6">
+                  <input
+                    class="block w-full rounded-lg py-[10px] px-3 font-normal text-xs bg-white disabled:text-gray-300 disabled:bg-opacity-60 text-gray-600 outline-none border border-solid border-gray-300 focus:border-gray-500 focus-visible:border-gray-500 hover:border-gray-500 disabled:border-gray-300"
+                    formControlName="productQuantity"
+                    [ngClass]=""
+                    id="productQuantity"
+                    placeholder="Enter Product Quantity"
+                    autocomplete="productQuantity"
+                    [ngClass]="{
+                      '!border-red-500':
+                        billsProduct.get('productQuantity')?.value.invalid &&
+                        (billsProduct.get('productQuantity')?.value?.dirty ||
+                          billsProduct.get('productQuantity')?.value.touched)
+                    }"
+                  />
+                </div>
+                <div class="w-2/6">
+                  <input
+                    class="block w-full rounded-lg py-[10px] px-3 font-normal text-xs bg-white disabled:text-gray-300 disabled:bg-opacity-60 text-gray-600 outline-none border border-solid border-gray-300 focus:border-gray-500 focus-visible:border-gray-500 hover:border-gray-500 disabled:border-gray-300"
+                    formControlName="productPrice"
+                    [ngClass]=""
+                    id="productPrice"
+                    placeholder="Enter Product Quantity"
+                    autocomplete="productPrice"
+                    [ngClass]="{
+                      '!border-red-500':
+                        billsProduct.get('productPrice')?.value.invalid &&
+                        (billsProduct.get('productPrice')?.value?.dirty ||
+                          billsProduct.get('productPrice')?.value.touched)
+                    }"
+                  />
+                </div>
+                <div class="w-1/6">
+                  <button
+                    (click)="removeProduct(index)"
+                    class="bg-red-500 text-white px-4 py-2 rounded-lg"
+                  >
+                    Remove
+                  </button>
+                </div>
+              </div>
+            </ng-container>
+          </ng-container>
+          <div class="flex justify-end">
+            <div class="w-1/6">
+              <app-form-field
+                [formGroup]="techInfo"
+                controlName="grandTotal"
+                label="Grand Total"
+                type="text"
+                autocomplete="grandTotal"
+              />
+            </div>
+          </div>
+        </div>
       </div>
       <div class="bg-green-200 hidden peer-checked/tab-four:block p-4 w-full">
-        Fourth tab pane
+        <jlc-select-field [formGroup]="createJobReq"
+        controlName="customer_id"
+        label="Customer"
+        placeholder="Select Customer"
+        [options]="userS.technicians()" />
       </div>
     </section>
   `,
-  styleUrl: './job-order.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ViewJobOrderComponent implements OnInit {
@@ -293,6 +388,7 @@ export class ViewJobOrderComponent implements OnInit {
 
   techInfo!: FormGroup;
   createJobReq!: FormGroup;
+  billInfo!: FormArray;
   warrantyOptions = warranty_options;
   brandOptions = brandOptions;
   serviceType = serviceType;
@@ -304,9 +400,21 @@ export class ViewJobOrderComponent implements OnInit {
   iconS = inject(UtilitiesService);
   fb = inject(FormBuilder);
 
+  public readonly userS = inject(UserService);
+
+  constructor() {
+    this.userS.getAllTechnicians();
+    effect(() => {
+      this.customers = this.userS.customers();
+    })
+  }
+
   ngOnInit(): void {
     this.initiateForm();
     this.techInfoForm();
+    this.techInfo.get('billsProduct')?.valueChanges.subscribe(() => {
+      this.updateGrandTotal();
+    });
   }
   public onClose(): void {
     this.close.emit();
@@ -338,6 +446,46 @@ export class ViewJobOrderComponent implements OnInit {
       bottomView: [''],
       leftView: [''],
       rightView: [''],
+      billsProduct: this.fb.array([]),
+      grandTotal: [''],
+    });
+  }
+
+  removeProduct(index: number): void {
+    this.billsProduct.removeAt(index);
+    this.updateGrandTotal(); // Recalculate after removing
+  }
+
+  updateGrandTotal(): void {
+    const total = this.billsProduct.controls.reduce((sum, product) => {
+      const quantity = product.get('productQuantity')?.value || 0;
+      const price = product.get('productPrice')?.value || 0;
+      return sum + quantity * price;
+    }, 0);
+
+    // Update the grandTotal form control
+    this.techInfo.get('grandTotal')?.setValue(total);
+  }
+
+  public get billsProduct(): FormArray {
+    return this.techInfo.get('billsProduct') as FormArray;
+  }
+
+  addBillProduct(): void {
+    const productForm = this.fb.group({
+      productName: ['', Validators.required],
+      productQuantity: [1, [Validators.required, Validators.min(1)]],
+      productPrice: [0, [Validators.required, Validators.min(0.01)]],
+    });
+
+    this.billsProduct.push(productForm);
+  }
+
+  createProduct(): FormGroup {
+    return this.fb.group({
+      productName: ['', Validators.required],
+      productQuantity: ['', [Validators.required, Validators.min(1)]],
+      productPrice: ['', [Validators.required, Validators.min(0.01)]],
     });
   }
 }

@@ -161,7 +161,6 @@ import { AlertService } from '../../../../shared/services/alert.service';
       />
     </div>
   </div>`,
-  styleUrl: './create-job.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CreateJobComponent implements OnInit {

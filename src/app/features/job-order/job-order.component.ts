@@ -56,7 +56,7 @@ import { ViewJobOrderComponent } from './components/job-order/job-order.componen
       <jlc-create-job (close)="jobCreateDialog.close()" />
       }
     </dialog>
-    <dialog #viewJobOrder class="w-1/2 rounded-lg">
+    <dialog #viewJobOrder class="lg:w-1/2 rounded-lg sm:w-[90%]">
       <jlc-view-job-order (close)="viewJobOrder.close()"/>
     </dialog>
     }`,

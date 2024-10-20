@@ -9,4 +9,6 @@ export const icons: LabelValuePair[] = [
   { label: 'document', value: 'icons/heroicons/solid/document.svg' },
   { label: 'gift', value: 'icons/heroicons/outline/gift.svg' },
   { label: 'close', value: 'icons/heroicons/outline/x.svg' },
+  { label: 'eye-open', value: 'icons/heroicons/outline/eye.svg' },
+  { label: 'eye-off', value: 'icons/heroicons/outline/eye-off.svg' },
 ];

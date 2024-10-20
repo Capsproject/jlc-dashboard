@@ -1,0 +1,1 @@
+import"./chunk-EQDQRRRY.js";var n=[{path:"job-orders",loadComponent:()=>import("./chunk-T7XCWPLZ.js").then(e=>e.JobOrderComponent),title:"User Management - Admin",data:{breadcrumbs:"User Management",role:["admin","owner"]}}];export{n as adminRoutes};

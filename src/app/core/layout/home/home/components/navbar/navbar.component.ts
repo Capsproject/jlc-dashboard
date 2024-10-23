@@ -21,8 +21,8 @@ import { RouterLink } from '@angular/router';
      "
     >
       <div class="flex items-center gap-1 flex-wrap mt-1">
-        <img src="images/jlc_logo.png" class="w-20 h-auto">
-        <h1 class="text-xl font-bold text-gray-800   max-sm:hidden md:hidden sm:hidden lg:block">J.L Calingasan Service Center</h1>
+        <img src="images/jlc_logo.png" class="w-20 py-4 h-auto">
+        <h1 class="text-xl font-bold pl-4 text-gray-800 max-sm:hidden md:hidden sm:hidden lg:block">J.L Calingasan Service Center</h1>
       </div>
 
       <svg
@@ -51,23 +51,23 @@ import { RouterLink } from '@angular/router';
            md:pt-0"
         >
           <li>
-            <a class="md:p-4 py-2 block hover:text-purple-400" href="#"
+            <a class="md:p-4 py-2 block hover:text-green-400" href="#"
               >Home</a
             >
           </li>
           <li>
-            <a class="md:p-4 py-2 block hover:text-purple-400" href="#"
+            <a class="md:p-4 py-2 block hover:text-green-400" href="#"
               >About</a
             >
           </li>
           <li>
-            <a class="md:p-4 py-2 block hover:text-purple-400" href="#"
+            <a class="md:p-4 py-2 block hover:text-green-400" href="#"
               >Service</a
             >
           </li>
           <li>
             <a
-              class="md:p-4 py-2 block hover:text-purple-400 text-purple-500"
+              class="md:p-4 py-2 block hover:text-green-600 text-green-00"
               [routerLink]="['/auth/register']" routerLinkActive="router-link-active"
               >Sign Up</a
             >

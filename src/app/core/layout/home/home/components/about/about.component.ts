@@ -15,7 +15,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
           <div class="w-full md:w-1/2 md:px-3 bg-white rounded-lg p-3">
             <div class="w-full">
               <h1
-                class="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl md:text-4xl lg:text-5xl xl:text-4xl mb-2"
+                class="text-3xl font-bold tracking-tight text-gray-900 sm:text-3xl md:text-3xl lg:text-4xl xl:text-4xl mb-2"
               >
                 <span class="block xl:inline"
                   >Welcome to JL Calingasan Service Center <br />
@@ -23,7 +23,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
                 >
               </h1>
               <p
-                class="mx-auto text-base text-gray-500 sm:max-w-md lg:text-xl md:max-w-3xl"
+                class="mx-auto text-base text-justify text-gray-500 sm:max-w-md lg:text-xl md:max-w-3xl"
               >
                 Explore our range of services, and discover how we can help keep
                 your home or business running smoothly. Your satisfaction is our
@@ -32,7 +32,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
               </p>
             </div>
             <div class="flex justify-center py-3">
-              <button class="bg-green-700 text-white p-3 rounded-lg">
+              <button class="bg-green-500 text-white hover:bg-green-800 p-3 rounded-lg">
                 Book Appointment
               </button>
             </div>
@@ -41,21 +41,22 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
       </div>
     </section>
     <!-- Section 3 -->
-    <section class="w-full bg-white pt-7 pb-7 md:pt-20 md:pb-24">
-      <div class="flex w-full justify-center">
-        <h1 class="font-medium text-gray-800 text-5xl">About the Company</h1>
+    <section class="w-full bg-white pt-7 pb-7 md:pt-20 md:pb-36">
+      <div class="flex w-full justify-center text-center xl:text-md">
+        <h1 class="font-bold text-gray-800 text-4xl mt-6 mb-12">
+          About the Company</h1>
       </div>
       <div
-        class="box-border flex flex-col items-center content-center px-8 mx-auto leading-6 text-black border-0 border-gray-300 border-solid md:flex-row max-w-7xl lg:px-16"
+        class="box-border flex flex-col items-center content-center mb-8 px-8 mx-auto leading-6 text-black border-0 border-gray-300 border-solid md:flex-row max-w-7xl lg:px-16"
       >
         <!-- Content -->
         <div
-          class="box-border order-first w-full text-black border-solid md:w-1/2 md:pl-10 md:order-none"
+          class="box-border order-first xl:text-lg md:text-md w-full text-black border-solid md:w-1/2 md:pl-10 md:order-none"
         >
           <p
-            class="pt-4 pb-8 m-0 leading-7 text-gray-700 border-0 border-gray-300 sm:pr-12 xl:pr-32 lg:text-lg"
+            class="box-border w-full text-black text-justify border-solid mt-8 mb-8 md:pl-6 xl:pl-10 xl:pr-2"
           >
-            Established in the year 1995, JL CALINGASAN SERVICE CENTER, is set
+            Established in the year 1995, J.L CALINGASAN SERVICE CENTER, is set
             out itself to be a leading SERVICE CENTER and INSTALLER in the area
             of BATANGAS. Owned and operated by the late Engr. Jaime Candido L.
             Calingasan back then and now by his wife, Mrs. Milagros A.
@@ -64,27 +65,27 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
         </div>
         <!-- Image -->
         <div
-          class="box-border relative w-full max-w-md px-4 mt-5 mb-4 -ml-5 text-center bg-no-repeat bg-contain border-solid md:ml-0 md:mt-0 md:max-w-none lg:mb-0 md:w-1/2 xl:pl-10"
+          class="box-border relative w-full max-w-md px-4 mt-5 mb-8 -ml-5 text-center justify-center bg-no-repeat bg-contain border-solid md:ml-0 md:mt-0 md:max-w-none lg:mb-0 md:w-1/2 xl:pl-10"
         >
           <img
             src="images/image1.png"
-            class="w-[900px] p-2 pl-6 pr-5 xl:pl-16 xl:pr-20 "
+            class="pl-4 sm:pr-10 xl:pl-16 lg:pr-24"
           />
         </div>
 
         <!-- End  Content -->
       </div>
-      <div class="flex w-full justify-center">
-        <h1 class="font-medium text-gray-800 text-5xl">
+      <div class="flex w-full justify-center text-center">
+        <h1 class="font-bold text-gray-800 text-4xl mt-8 mb-12">
           Mission of the Company
         </h1>
       </div>
       <div
-        class="box-border flex flex-col items-center content-center px-8 mx-auto leading-6 text-black border-0 border-gray-300 border-solid md:flex-row max-w-7xl lg:px-16"
+        class="box-border flex flex-col items-center content-center mb-12 px-8 mx-auto leading-6 text-black border-0 border-gray-300 border-solid md:flex-row max-w-7xl lg:px-16"
       >
         <!-- Image -->
         <div
-          class="box-border relative w-full max-w-md px-4 mt-5 mb-4 -ml-5 text-center bg-no-repeat bg-contain border-solid md:ml-0 md:mt-0 md:max-w-none lg:mb-0 md:w-1/2 xl:pl-10"
+          class="box-border relative w-full max-w-md px-4 mt-8 -ml-5 text-center bg-no-repeat bg-contain border-solid md:ml-0 md:mt-0 md:max-w-none lg:mb-0 md:w-1/2 xl:pl-10"
         >
           <img
             src="images/image2.png"
@@ -93,13 +94,13 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
         </div>
         <!-- Content -->
         <div
-          class="box-border order-first w-full text-black border-solid md:w-1/2 md:pl-10 md:order-none"
+          class="box-border order-first w-full xl:text-lg md:text-md text-black border-solid md:w-1/2 md:pl-10 md:order-none"
         >
           <ul
-            class="list-disc list-inside pt-4 pb-8 m-0 leading-7 text-gray-700 border-0 border-gray-300 sm:pr-12 xl:pr-32 lg:text-lg"
+            class="text-justify list-disc xl:text-md list-inside pt-4 pb-8 leading-7 text-gray-700 border-0 border-gray-300 sm:pr-8 xl:pr-24 xl:text-md"
           >
             <li>
-              To provide quality, responsive, and efficient service to our
+             To provide quality, responsive, and efficient service to our
               customers.
             </li>
             <li>
@@ -125,17 +126,17 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
         <!-- End  Content -->
       </div>
 
-      <div class="flex w-full justify-center">
-        <h1 class="font-medium text-gray-800 text-5xl mb-2">
+      <div class="flex w-full justify-center text-center">
+        <h1 class="font-bold text-gray-800 text-4xl mb-16 mt-8">
           Vision of the Company
         </h1>
       </div>
       <div
-        class="box-border flex flex-col items-center content-center px-8 mx-auto mt-2 leading-6 text-black border-0 border-gray-300 border-solid md:mt-20 xl:mt-0 md:flex-row max-w-7xl lg:px-16"
+        class="box-border flex flex-col items-center xl:text-lg md:text-md content-center px-8 mx-auto mt-2 leading-6 text-black border-0 border-gray-300 border-solid md:mt-20 xl:mt-0 md:flex-row max-w-7xl lg:px-16"
       >
         <!-- Content -->
         <div
-          class="box-border w-full text-black border-solid md:w-1/2 md:pl-6 xl:pl-32"
+          class="box-border w-full text-black text-justify border-solid md:w-1/2 md:pl-6 xl:pl-20"
         >
           <p>
             To become a globally competent service provider with a highly
@@ -150,7 +151,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
         >
           <img
             src="images/image3.png"
-            class="pl-4 sm:pr-10 xl:pl-10 lg:pr-32"
+            class="pl-4 sm:pr-10 xl:pl-16 lg:pr-24"
           />
         </div>
       </div>

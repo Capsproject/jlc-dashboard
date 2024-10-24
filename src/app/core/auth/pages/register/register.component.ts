@@ -55,7 +55,10 @@ import {
             type="password"
             autocomplete="password"
           />
-
+          @if (registrationForm.controls['password'].value !==
+          registrationForm.controls['confirmPassword'].value ) {
+          <p class="text-xs text-red-500">Passwords do not match</p>
+          }
           <button
             type="submit"
             class="w-full my-2 mx-0 p-2 border-0 rounded-lg text-sm leading-6 font-medium bg-emerald-600 text-white hover:bg-emerald-500 hover:cursor-pointer disabled:opacity-50"
@@ -99,7 +102,8 @@ export class RegisterComponent {
   public checkInvalid(): boolean {
     if (
       this.registrationForm.controls['password'].value !==
-      this.registrationForm.controls['confirmPassword'].value || this.registrationForm.invalid
+        this.registrationForm.controls['confirmPassword'].value ||
+      this.registrationForm.invalid
     ) {
       return true;
     }

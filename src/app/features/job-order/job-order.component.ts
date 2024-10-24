@@ -19,6 +19,7 @@ import { LoadingComponent } from '../../shared/components/loading/loading.compon
 import { AuthService } from '../../core/auth/services/auth.service';
 import { CreateJobComponent } from './components/create-job/create-job.component';
 import { ViewJobOrderComponent } from './components/job-order/job-order.component';
+import { AssignTechComponent } from './components/assign-tech/assign-tech.component';
 
 @Component({
   selector: 'app-job-order',
@@ -31,6 +32,7 @@ import { ViewJobOrderComponent } from './components/job-order/job-order.componen
     LoadingComponent,
     CreateJobComponent,
     ViewJobOrderComponent,
+    AssignTechComponent,
   ],
   template: ` @if (loading) {
     <div class="h-[90vh] flex justify-center items-center">
@@ -57,7 +59,10 @@ import { ViewJobOrderComponent } from './components/job-order/job-order.componen
       }
     </dialog>
     <dialog #viewJobOrder class="lg:w-1/2 rounded-lg sm:w-[90%]">
-      <jlc-view-job-order (close)="viewJobOrder.close()"/>
+      <jlc-view-job-order (close)="viewJobOrder.close()" />
+    </dialog>
+    <dialog #assign class="lg:w-[90%] rounded-lg md:w-[90%] sm:w-[90%]">
+      <jlc-assign-tech (close)="assign.close()" />
     </dialog>
     }`,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -65,6 +70,7 @@ import { ViewJobOrderComponent } from './components/job-order/job-order.componen
 export class JobOrderComponent implements OnInit {
   @ViewChild('jobCreateDialog') jobCreateDialog!: ElementRef;
   @ViewChild('viewJobOrder') viewJobOrder!: ElementRef;
+  @ViewChild('assign') assign!: ElementRef;
   public addIcon = 'icons/heroicons/outline/folder-plus.svg';
   public loading!: boolean;
 
@@ -122,8 +128,10 @@ export class JobOrderComponent implements OnInit {
   }
 
   public openViewDialog() {
-    this.viewJobOrder.nativeElement.showModal();
+    if (this.accountType === 'owner') {
+      this.assign.nativeElement.showModal();
+    } else {
+      this.viewJobOrder.nativeElement.showModal();
+    }
   }
-
-
 }
